@@ -9,7 +9,7 @@ namespace PetFamily.Domain.Volunteer
 {
     public record VolunteerId : EntityId
     {
-        private VolunteerId(Guid _guid) : base(_guid)
+        public VolunteerId(Guid _guid) : base(_guid)
         {
             
         }        

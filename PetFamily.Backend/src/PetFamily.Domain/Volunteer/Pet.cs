@@ -98,7 +98,7 @@ namespace PetFamily.Domain.Volunteer
             if (ValidationFailed)
             {
                 FailureDescription = stringBuilder.ToString();
-                return Result.Failure<Pet>($"Необходимо исправить следующие замечания:\r\n ${FailureDescription}");
+                return Result.Failure<Pet>($"Необходимо исправить следующие замечания:\r\n {FailureDescription}");
             }
 
             var pet = new Pet(petId, byName, description, species, breedName, dateOfBirth,
