@@ -8,9 +8,9 @@ namespace PetFamily.Domain.Shared
 {
     public abstract class Entity<TId> where TId : EntityId
     {
-        protected Entity(TId _id) 
+        protected Entity(TId id) 
         {
-            Id = _id;
+            Id = id;
         }
         public TId Id { get; private set; }
         

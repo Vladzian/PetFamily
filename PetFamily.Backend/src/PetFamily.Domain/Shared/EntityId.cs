@@ -10,9 +10,9 @@ namespace PetFamily.Domain.Shared
 {
     public record EntityId
     {
-        public EntityId(Guid _guid)
+        public EntityId(Guid guid)
         {
-            Value = _guid;
+            Value = guid;
         }
         public Guid Value { get; }
         public static EntityId NewEntityId() => new(Guid.NewGuid());
