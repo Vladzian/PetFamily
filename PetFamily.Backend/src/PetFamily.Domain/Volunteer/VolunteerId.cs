@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Volunteer
 {
-    public record VolunteerId : EntityId
+    public class VolunteerId : EntityId
     {
         public VolunteerId(Guid guid) : base(guid)
         {

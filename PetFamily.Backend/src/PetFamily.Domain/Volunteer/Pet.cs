@@ -127,18 +127,10 @@ namespace PetFamily.Domain.Volunteer
         }
 
     }
-
-
     public enum HelpStatus //пока перечисление, но статусы могут меняться, стоит их завести как отдельную сущность в БД
     {
         NeedsHelp = 0,
         LookingForAHome = 1,
         FoundAHome = 2
-    }
-    public enum Species
-    {
-        Dog,
-        Cat,
-        Ower
-    }
+    }   
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Shared
 {
-    public record EntityId : IComparable<EntityId>
+    public class EntityId : ComparableValueObject
     {
         public EntityId(Guid guid)
         {
@@ -18,16 +18,9 @@ namespace PetFamily.Domain.Shared
         public static EntityId NewEntityId() => new(Guid.NewGuid());
         public static EntityId Empty() => new(Guid.Empty);
 
-        public int CompareTo(EntityId? obj)
+        protected override IEnumerable<IComparable> GetComparableEqualityComponents()
         {
-            if (obj is null) 
-                return 1;
-
-            EntityId otherEntityId = obj;
-            if (otherEntityId != null)
-                return this.Value.CompareTo(obj.Value);
-            else
-                throw new ArgumentException("Object is not a EntityId");
+            yield return Value;
         }
     }
 }

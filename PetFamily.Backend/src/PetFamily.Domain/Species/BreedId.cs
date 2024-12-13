@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Species
 {
-    public record BreedId : EntityId
+    public class BreedId : EntityId
     {
         public BreedId(Guid guid):base(guid) 
         {

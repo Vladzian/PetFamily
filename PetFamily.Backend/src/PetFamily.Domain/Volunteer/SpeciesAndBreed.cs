@@ -1,4 +1,5 @@
-﻿using PetFamily.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 using PetFamily.Domain.Species;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Volunteer
 {
-    public record SpeciesAndBreed
+    public class SpeciesAndBreed : ComparableValueObject
     {
         public SpeciesAndBreed(SpeciesId speciesId, BreedId breedId)
         {
@@ -17,5 +18,11 @@ namespace PetFamily.Domain.Volunteer
         }
         public SpeciesId SpeciesId { get; }
         public BreedId BreedId { get; }
+
+        protected override IEnumerable<IComparable> GetComparableEqualityComponents()
+        {
+            yield return SpeciesId;
+            yield return BreedId;
+        }
     }
 }
