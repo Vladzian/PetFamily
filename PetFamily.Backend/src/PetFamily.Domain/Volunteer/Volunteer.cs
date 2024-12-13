@@ -67,7 +67,7 @@ namespace PetFamily.Domain.Volunteer
         public Result<IReadOnlyList<Pet>> AddPet(Pet pet)
         {
             if (_Pets.Contains(pet))
-                return Result.Failure<IReadOnlyList<Pet>>("This pet already exists");
+                return Result.Failure<IReadOnlyList<Pet>>("Этот питомец уже добавлен в коллекцию волонтера");
 
             _Pets.Add(pet);
             return Result.Success(Pets);
