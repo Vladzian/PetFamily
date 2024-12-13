@@ -11,16 +11,17 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace PetFamily.Domain.Volunteer
 {
-    public class Volunteer : Shared.Entity<VolunteerId>
+    public class Volunteer : Entity<VolunteerId>
     {
         //for ef core
-        private Volunteer(VolunteerId petId) : base(petId)
+        private Volunteer() : base()
         {            
         }
-        public Volunteer(VolunteerId petId, string fullName,
+        public Volunteer(VolunteerId volunteerId, string fullName,
                          string email, string generalDescription, 
-                         string phoneNumber, byte experience) : base(petId)
+                         string phoneNumber, byte experience) : base()
         {
+            Id = volunteerId;
             FullName = fullName;
             Email = email;
             GeneralDescription = generalDescription;
@@ -73,7 +74,7 @@ namespace PetFamily.Domain.Volunteer
             return Result.Success(Pets);
         }
 
-        public static Result<Volunteer> Create(VolunteerId petId, string fullName, 
+        public static Result<Volunteer> Create(VolunteerId volunteerId, string fullName, 
                                         string email, string generalDescription, 
                                         string phoneNumber, byte experience = 0)
         {
@@ -103,7 +104,7 @@ namespace PetFamily.Domain.Volunteer
                 return Result.Failure<Volunteer>($"Необходимо исправить следующие замечания:\r\n {stringBuilder.ToString()}");
             }
 
-            var volunteer = new Volunteer(petId, fullName, email, generalDescription, phoneNumber, experience);
+            var volunteer = new Volunteer(volunteerId, fullName, email, generalDescription, phoneNumber, experience);
             return Result.Success(volunteer);
         }
     }

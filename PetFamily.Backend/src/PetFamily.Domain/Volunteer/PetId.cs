@@ -1,4 +1,5 @@
-﻿using PetFamily.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,7 @@ namespace PetFamily.Domain.Volunteer
     public record PetId : EntityId
     {
         public  PetId(Guid guid) : base(guid)
-        {
-            
+        {            
         }
     }  
 

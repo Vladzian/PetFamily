@@ -1,15 +1,14 @@
-﻿using System.Linq;
+﻿using CSharpFunctionalExtensions;
 using System.Text;
 using System.Text.RegularExpressions;
-using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Volunteer
 {
-    public class Pet : Shared.Entity<PetId>
+    public class Pet : Entity<PetId>
     {
         //for ef core
-        private Pet(PetId petId) : base(petId)
+        private Pet() : base()
         {
         }
 
@@ -20,8 +19,9 @@ namespace PetFamily.Domain.Volunteer
                     float weight, float height,
                     bool isNeutered, bool isVaccinated,
                     HelpStatus helpStatus, Address petAddress,
-                    string ownerPhoneNumber) : base(petId)
+                    string ownerPhoneNumber) : base()
         {
+            Id = petId;
             ByName = byName;
             Description = description;
             Specie = specie;
@@ -39,7 +39,7 @@ namespace PetFamily.Domain.Volunteer
 
             CreationDate = DateTime.UtcNow;
         }
-
+          
         public string ByName { get; private set; }
         public string Description { get; private set; } = string.Empty;
         public DateTime DateOfBirth { get; private set; } = default!;
