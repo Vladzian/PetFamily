@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Domain.Pets
+namespace PetFamily.Domain.Volunteer
 {
     public class Pet : Shared.Entity<PetId>
     {
@@ -12,7 +12,7 @@ namespace PetFamily.Domain.Pets
         {
         }
 
-        private Pet(PetId petId, string byName, 
+        private Pet(PetId petId, string byName,
                     string description, Species specie,
                     string breedName, DateTime dateOfBirth,
                     string color, string petHealthInfo,
@@ -39,17 +39,17 @@ namespace PetFamily.Domain.Pets
             CreationDate = DateTime.UtcNow;
         }
 
-        public string ByName { get; private set;}
-        public string Description { get; private set;} = String.Empty;
-        public DateTime DateOfBirth { get; private set;} = default!;
-        public Species Specie { get; private set; } 
-        public string BreedName { get; private set; } 
-        public string Color { get; private set;} = null!;
-        public string PetHealthInfo { get; private set;} = String.Empty;
-        public float Weight { get; private set;} 
-        public float Height { get; private set;}
+        public string ByName { get; private set; }
+        public string Description { get; private set; } = string.Empty;
+        public DateTime DateOfBirth { get; private set; } = default!;
+        public Species Specie { get; private set; }
+        public string BreedName { get; private set; }
+        public string Color { get; private set; } = null!;
+        public string PetHealthInfo { get; private set; } = string.Empty;
+        public float Weight { get; private set; }
+        public float Height { get; private set; }
         public bool IsNeutered { get; private set; }
-        public bool IsVaccinated { get; private set; } 
+        public bool IsVaccinated { get; private set; }
         public HelpStatus HelpStatus { get; private set; } = HelpStatus.FoundAHome;
         public Address PetAddress { get; private set; }
         public string PetAddressByString => Address.AddressByString(PetAddress);
@@ -64,13 +64,13 @@ namespace PetFamily.Domain.Pets
                                         string breedName, DateTime dateOfBirth,
                                         string color, string petHealthInfo,
                                         float weight, float height,
-                                        bool isNeutered, bool isVaccinated, 
+                                        bool isNeutered, bool isVaccinated,
                                         HelpStatus helpStatus, Address petAddress,
                                         string ownerPhoneNumber)
         {
             bool ValidationFailed = false;
             StringBuilder stringBuilder = new StringBuilder();
-            string FailureDescription = String.Empty;
+            string FailureDescription = string.Empty;
             if (string.IsNullOrWhiteSpace(byName))
             {
                 ValidationFailed = true;
@@ -98,12 +98,12 @@ namespace PetFamily.Domain.Pets
             if (ValidationFailed)
             {
                 FailureDescription = stringBuilder.ToString();
-                return Result.Failure<Pet>($"Необходимо исправить следующие замечания:\r\n ${FailureDescription}");
+                return Result.Failure<Pet>($"Необходимо исправить следующие замечания:\r\n {FailureDescription}");
             }
 
-            var pet = new Pet(petId, byName, description, species, breedName, dateOfBirth, 
-                              color, petHealthInfo, weight, height, 
-                              isNeutered, isVaccinated, helpStatus, petAddress, 
+            var pet = new Pet(petId, byName, description, species, breedName, dateOfBirth,
+                              color, petHealthInfo, weight, height,
+                              isNeutered, isVaccinated, helpStatus, petAddress,
                               ownerPhoneNumber);
             return Result.Success(pet);
         }
@@ -118,7 +118,7 @@ namespace PetFamily.Domain.Pets
         }
     }
 
-   
+
     public enum HelpStatus //пока перечисление, но статусы могут меняться, стоит их завести как отдельную сущность в БД
     {
         NeedsHelp = 0,
