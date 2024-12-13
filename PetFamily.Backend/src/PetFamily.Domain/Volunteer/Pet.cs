@@ -13,8 +13,7 @@ namespace PetFamily.Domain.Volunteer
         }
 
         private Pet(PetId petId, string byName,
-                    string description, Species specie,
-                    string breedName, DateTime dateOfBirth,
+                    string description, SpeciesAndBreed petSpeciesAndBreed , DateTime dateOfBirth,
                     string color, string petHealthInfo,
                     float weight, float height,
                     bool isNeutered, bool isVaccinated,
@@ -24,8 +23,7 @@ namespace PetFamily.Domain.Volunteer
             Id = petId;
             ByName = byName;
             Description = description;
-            Specie = specie;
-            BreedName = breedName;
+            PetSpeciesAndBreed = petSpeciesAndBreed;
             DateOfBirth = dateOfBirth;
             Color = color;
             PetHealthInfo = petHealthInfo;
@@ -43,8 +41,7 @@ namespace PetFamily.Domain.Volunteer
         public string ByName { get; private set; }
         public string Description { get; private set; } = string.Empty;
         public DateTime DateOfBirth { get; private set; } = default!;
-        public Species Specie { get; private set; }
-        public string BreedName { get; private set; }
+        public SpeciesAndBreed PetSpeciesAndBreed {  get; private set; }
         public string Color { get; private set; } = null!;
         public string PetHealthInfo { get; private set; } = string.Empty;
         public float Weight { get; private set; }
@@ -64,8 +61,8 @@ namespace PetFamily.Domain.Volunteer
         public DateTime CreationDate { get; private set; }
 
         public static Result<Pet> Create(PetId petId, string byName,
-                                        string description, Species species,
-                                        string breedName, DateTime dateOfBirth,
+                                        string description, SpeciesAndBreed petSpeciesAndBreed,
+                                        DateTime dateOfBirth,
                                         string color, string petHealthInfo,
                                         float weight, float height,
                                         bool isNeutered, bool isVaccinated,
@@ -105,7 +102,7 @@ namespace PetFamily.Domain.Volunteer
                 return Result.Failure<Pet>($"Необходимо исправить следующие замечания:\r\n {FailureDescription}");
             }
 
-            var pet = new Pet(petId, byName, description, species, breedName, dateOfBirth,
+            var pet = new Pet(petId, byName, description, petSpeciesAndBreed, dateOfBirth,
                               color, petHealthInfo, weight, height,
                               isNeutered, isVaccinated, helpStatus, petAddress,
                               ownerPhoneNumber);

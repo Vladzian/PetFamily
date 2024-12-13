@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.Domain;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.Species;
 using PetFamily.Domain.Volunteer;
 using System.Text;
 
@@ -25,14 +26,18 @@ app.MapGet("get", () =>{
     Address GoofyAddress = Address.NewAddress("Goofy", "Goofy", "Goofy", "Goofy", "Goofy", "Goofy");
     Address MikkeyAddress = Address.NewAddress("Mikkey", "Mikkey", "Mikkey", "Mikkey", "Mikkey", "Mikkey");
     Address TomAddress = Address.NewAddress("Tom", "Tom", "Tom", "Tom", "Tom", "Tom");
-    var resultGoofy = Pet.Create(new PetId(Guid.NewGuid()), "Goofy", "Disney dog", Species.Dog, "Disney",
+
+    SpeciesAndBreed SpNBrGoofy = new SpeciesAndBreed(new SpeciesId(Guid.NewGuid()), new BreedId(Guid.NewGuid()));
+    SpeciesAndBreed SpNBrMikkey = new SpeciesAndBreed(new SpeciesId(Guid.NewGuid()), new BreedId(Guid.NewGuid()));
+    SpeciesAndBreed SpNBrTom = new SpeciesAndBreed(new SpeciesId(Guid.NewGuid()), new BreedId(Guid.NewGuid()));
+    var resultGoofy = Pet.Create(new PetId(Guid.NewGuid()), "Goofy", "Disney dog", SpNBrGoofy,
                         new DateTime(1932, 5, 27, 0, 0, 0, DateTimeKind.Utc), "black", "helthy", 70f, 175f, true, true,
                         HelpStatus.LookingForAHome, GoofyAddress, "+78888888888");
     
-    var resultMikkey = Pet.Create(new PetId(Guid.NewGuid()), "Mikkey", "Disney mouse", Species.Ower, "Disney",
+    var resultMikkey = Pet.Create(new PetId(Guid.NewGuid()), "Mikkey", "Disney mouse", SpNBrMikkey,
                         new DateTime(1932, 5, 27, 0, 0, 0, DateTimeKind.Utc), "black", "helthy", 55f, 155f, true, true,
                         HelpStatus.LookingForAHome, MikkeyAddress, "+78888888888");
-    var resultTom = Pet.Create(new PetId(Guid.NewGuid()), "Tom", "Metro-Goldwyn-Mayer cat", Species.Cat, "Disney",
+    var resultTom = Pet.Create(new PetId(Guid.NewGuid()), "Tom", "Metro-Goldwyn-Mayer cat", SpNBrTom,
                         new DateTime(1932, 5, 27, 0, 0, 0, DateTimeKind.Utc), "grey", "helthy", 70f, 175f, true, true,
                         HelpStatus.FoundAHome, TomAddress, "+78888888888");
 
@@ -59,7 +64,7 @@ app.MapGet("get", () =>{
 
 
     VolunteerId id = new VolunteerId(Guid.NewGuid());
-    var resultVolunteer = Volunteer.Create(id, "Elon Reeve Musk", "ElonMusk@starlink.org", "", "+8 888 888 88 88");
+    var resultVolunteer = Volunteer.Create(id, "Elon Reeve Musk", "ElonMusk@starlink.org", "", "+7 888 888 88 88");
 
     if(resultVolunteer.IsFailure)
         return $"Ќе удалось добавить нового волонтера:\r\n{resultVolunteer.Error}";
