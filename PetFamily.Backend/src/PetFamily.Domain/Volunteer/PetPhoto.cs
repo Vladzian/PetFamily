@@ -13,10 +13,10 @@ namespace PetFamily.Domain.Volunteer
         private PetPhoto(string path, bool isMainFoto)
         {
             Path = path;
-            IsMainFoto = isMainFoto;
+            IsMain = isMainFoto;
         }
         public string Path {get; private set; }
-        public bool IsMainFoto { get; private set; }
+        public bool IsMain { get; private set; }
 
         public static Result<PetPhoto> Create(string path, bool isMainPhoto)
         {
