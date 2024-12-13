@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
@@ -54,6 +55,9 @@ namespace PetFamily.Domain.Volunteer
         public Address PetAddress { get; private set; }
         public string PetAddressByString => Address.AddressByString(PetAddress);
         public string OwnerPhoneNumber { get; private set; }
+
+        private readonly List<PetPhoto> _PetPhotos = [];
+        public IReadOnlyList<PetPhoto> PetPhotos => _PetPhotos;
 
         private readonly List<RequisiteForHelp> _RequisitesForHelp = [];
         public IReadOnlyList<RequisiteForHelp> RequisitesForHelp => _RequisitesForHelp;
@@ -111,11 +115,20 @@ namespace PetFamily.Domain.Volunteer
         public Result<IReadOnlyList<RequisiteForHelp>> AddRequisiteForHelp(RequisiteForHelp _requisiteForHelp)
         {
             if (_RequisitesForHelp.Contains(_requisiteForHelp))
-                return Result.Failure<IReadOnlyList<RequisiteForHelp>>("This requisite already exists");
+                return Result.Failure<IReadOnlyList<RequisiteForHelp>>("Данный реквизит уже существует в списке.");
 
             _RequisitesForHelp.Add(_requisiteForHelp);
             return Result.Success(RequisitesForHelp);
         }
+        public Result<IReadOnlyList<PetPhoto>> AddPetPhoto(PetPhoto petPhoto)
+        {
+            if (_PetPhotos.Contains(petPhoto))
+                return Result.Failure<IReadOnlyList<PetPhoto>>("Такое фото уже существует в коллекции питомца.");
+
+            _PetPhotos.Add(petPhoto);
+            return Result.Success(PetPhotos);
+        }
+
     }
 
 
