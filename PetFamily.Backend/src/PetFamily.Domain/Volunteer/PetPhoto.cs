@@ -15,8 +15,8 @@ namespace PetFamily.Domain.Volunteer
             Path = path;
             IsMainFoto = isMainFoto;
         }
-        public string Path {get; private set; }
-        public bool IsMainFoto { get; private set; }
+        public string Path { get; }
+        public bool IsMainFoto { get; }
 
         public static Result<PetPhoto> Create(string path, bool isMainPhoto)
         {
