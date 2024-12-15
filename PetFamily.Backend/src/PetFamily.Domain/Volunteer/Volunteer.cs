@@ -11,7 +11,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace PetFamily.Domain.Volunteer
 {
-    public class Volunteer : Entity<VolunteerId>
+    public sealed class Volunteer : Entity<VolunteerId>
     {
         //for ef core
         private Volunteer() : base()

@@ -8,8 +8,12 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Volunteer
 {
-    public class PetId : EntityId
+    public class PetId : EntityId<PetId>
     {
+        public PetId()
+        {
+            
+        }
         public  PetId(Guid guid) : base(guid)
         {            
         }
