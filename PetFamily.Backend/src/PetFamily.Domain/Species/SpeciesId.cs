@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetFamily.Domain.Volunteer
+namespace PetFamily.Domain.Species
 {
-    public class VolunteerId : EntityId
+    public class SpeciesId : EntityId
     {
-        public VolunteerId(Guid guid) : base(guid)
+        public SpeciesId(Guid guid) : base(guid)
         {
             
-        }        
+        }
     }
 }

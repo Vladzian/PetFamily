@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Shared
 {
-    public record EntityId
+    public class EntityId : ComparableValueObject
     {
         public EntityId(Guid guid)
         {
@@ -17,5 +17,10 @@ namespace PetFamily.Domain.Shared
         public Guid Value { get; }
         public static EntityId NewEntityId() => new(Guid.NewGuid());
         public static EntityId Empty() => new(Guid.Empty);
+
+        protected override IEnumerable<IComparable> GetComparableEqualityComponents()
+        {
+            yield return Value;
+        }
     }
 }
