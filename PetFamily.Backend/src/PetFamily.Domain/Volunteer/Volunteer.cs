@@ -108,15 +108,4 @@ namespace PetFamily.Domain.Volunteer
             return Result.Success(volunteer);
         }
     }
-
-    public class SocialMedia
-    {
-        public SocialMedia(string name, string link)
-        {
-            Name = name;
-            Link = link;
-        }
-        public string Name { get; private set; }
-        public string Link { get; private set; }
-    }
 }

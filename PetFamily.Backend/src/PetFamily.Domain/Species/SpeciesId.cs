@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Species
 {
-    public class SpeciesId : EntityId
+    public class SpeciesId : EntityId<SpeciesId>
     {
+        public SpeciesId()
+        {
+            
+        }
         public SpeciesId(Guid guid) : base(guid)
         {
             

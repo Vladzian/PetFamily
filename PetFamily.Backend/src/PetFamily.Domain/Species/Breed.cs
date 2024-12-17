@@ -11,10 +11,10 @@ namespace PetFamily.Domain.Species
     public class Breed : Entity<BreedId>
     {
         //for ef core
-        private Breed() : base()
+        public Breed() : base()
         {
         }
-        private Breed(BreedId breedId, string name) 
+        public Breed(BreedId breedId, string name) 
         {
             Id = breedId;
             Name = name;

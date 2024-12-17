@@ -43,11 +43,15 @@ namespace PetFamily.Infrastructure.Configurations
                 .WithOne()
                 .HasForeignKey("volunteer_id");
 
-            //complex type - надо еще поизучать 
-            //builder.HasMany(v => v.SocialMedias);
-            //builder.HasMany(v => v.RequisitesForHelp)
+            builder.OwnsMany(v => v.SocialMedias, sm =>
+            {
+                sm.ToJson();
+            });
 
-
+            builder.OwnsMany(v => v.RequisitesForHelp, rh =>
+            { 
+                rh.ToJson();
+            });
         }
     }
 }
