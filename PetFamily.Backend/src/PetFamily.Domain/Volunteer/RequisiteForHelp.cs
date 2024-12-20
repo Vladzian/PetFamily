@@ -8,6 +8,11 @@ namespace PetFamily.Domain.Volunteer
 {
     public class RequisiteForHelp
     {
+        //for ef core
+        private RequisiteForHelp()
+        {
+            
+        }
         public RequisiteForHelp(string name, string desc)
         {
             Name = name;

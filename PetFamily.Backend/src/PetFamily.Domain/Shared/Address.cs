@@ -16,6 +16,10 @@ namespace PetFamily.Domain.Shared
     //ну или это все такие ValueObject
     public class Address 
     {
+        //for ef core
+        private Address()
+        {
+        }
         public string Building { get; }
         public string Street { get; }
         public string City { get; }

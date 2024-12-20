@@ -2,6 +2,11 @@
 {
     public class SocialMedia
     {
+        //for ef core
+        private SocialMedia()
+        {
+            
+        }
         public SocialMedia(string name, string link)
         {
             Name = name;

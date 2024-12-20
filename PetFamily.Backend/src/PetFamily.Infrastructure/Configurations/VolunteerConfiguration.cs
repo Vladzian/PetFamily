@@ -20,7 +20,7 @@ namespace PetFamily.Infrastructure.Configurations
             builder.Property(v => v.Id)
                 .HasConversion(
                     id => id.Value,
-                    value => EntityId<VolunteerId>.Create(value));
+                    value => VolunteerId.Create(value));
             builder.Property(v => v.FullName)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_FULLNAME_LENGHT);

@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Volunteer
 {
-    public class VolunteerId : EntityId<VolunteerId>
+    public record VolunteerId
     {
-        public VolunteerId()
+        private VolunteerId(Guid guid)
         {
-            
+            Value = guid;
         }
-        public VolunteerId(Guid guid) : base(guid)
-        {
-            
-        }        
+        public Guid Value { get; }
+        public static VolunteerId NewEntityId() => new(Guid.NewGuid());
+        public static VolunteerId Empty() => new(Guid.Empty);
+        public static VolunteerId Create(Guid id) => new(id);
     }
 }

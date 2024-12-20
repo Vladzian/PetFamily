@@ -11,17 +11,16 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace PetFamily.Domain.Volunteer
 {
-    public sealed class Volunteer : Entity<VolunteerId>
+    public sealed class Volunteer : Shared.Entity<VolunteerId>
     {
         //for ef core
-        private Volunteer() : base()
+        private Volunteer(VolunteerId id) : base(id)
         {            
         }
         public Volunteer(VolunteerId volunteerId, string fullName,
                          string email, string generalDescription, 
-                         string phoneNumber, byte experience) : base()
-        {
-            Id = volunteerId;
+                         string phoneNumber, byte experience) : base(volunteerId)
+        {      
             FullName = fullName;
             Email = email;
             GeneralDescription = generalDescription;

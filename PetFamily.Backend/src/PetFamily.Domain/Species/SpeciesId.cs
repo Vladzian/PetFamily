@@ -1,4 +1,5 @@
 ﻿using PetFamily.Domain.Shared;
+using PetFamily.Domain.Volunteer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Species
 {
-    public class SpeciesId : EntityId<SpeciesId>
+    public record SpeciesId
     {
-        public SpeciesId()
+        private SpeciesId(Guid guid)
         {
-            
+            Value = guid;
         }
-        public SpeciesId(Guid guid) : base(guid)
-        {
-            
-        }
+        public Guid Value { get; }
+        public static SpeciesId NewEntityId() => new(Guid.NewGuid());
+        public static SpeciesId Empty() => new(Guid.Empty);
+        public static SpeciesId Create(Guid id) => new(id);
     }
 }

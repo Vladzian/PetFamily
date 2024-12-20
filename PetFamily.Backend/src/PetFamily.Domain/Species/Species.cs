@@ -9,11 +9,15 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Species
 {
-    public class Species : Entity<SpeciesId>
+    public class Species : Shared.Entity<SpeciesId>
     {
-        private Species(SpeciesId speciesId, string name):base() 
+        //for ef core
+        private Species(SpeciesId id) : base(id)
         {
-            Id = speciesId;
+            
+        }
+        private Species(SpeciesId speciesId, string name) : base(speciesId) 
+        {          
             Name = name;
         }
         public string Name { get; set; }
@@ -22,7 +26,7 @@ namespace PetFamily.Domain.Species
         public static Result<Species> Create(SpeciesId speciesId, string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                return Result.Failure<Species>("Не задано название породы.");
+                return Result.Failure<Species>("Не задано наименование вида.");
 
             Species species = new Species(speciesId, name);
             return Result.Success<Species>(species);

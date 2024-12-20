@@ -2,28 +2,27 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.Species;
 
 namespace PetFamily.Domain.Volunteer
 {
-    public class Pet : Entity<PetId>
+    public class Pet : Shared.Entity<PetId>
     {
         //for ef core
-        private Pet() : base()
+        private Pet(PetId id) : base(id)
         {
         }
 
         private Pet(PetId petId, string byName,
-                    string description, SpeciesAndBreed petSpeciesAndBreed , DateTime dateOfBirth,
+                    string description, DateTime dateOfBirth,
                     string color, string petHealthInfo,
                     float weight, float height,
                     bool isNeutered, bool isVaccinated,
                     HelpStatus helpStatus, Address petAddress,
-                    string ownerPhoneNumber) : base()
-        {
-            Id = petId;
+                    string ownerPhoneNumber) : base(petId)
+        {           
             ByName = byName;
-            Description = description;
-            PetSpeciesAndBreed = petSpeciesAndBreed;
+            Description = description;            
             DateOfBirth = dateOfBirth;
             Color = color;
             PetHealthInfo = petHealthInfo;
@@ -41,7 +40,8 @@ namespace PetFamily.Domain.Volunteer
         public string ByName { get; private set; }
         public string Description { get; private set; } = string.Empty;
         public DateTime DateOfBirth { get; private set; } = default!;
-        public SpeciesAndBreed PetSpeciesAndBreed {  get; private set; }
+        public Guid? SpecieId {  get; private set; } 
+        public Guid? BreedId {  get; private set; }        
         public string Color { get; private set; } = null!;
         public string PetHealthInfo { get; private set; } = string.Empty;
         public float Weight { get; private set; }
@@ -61,8 +61,7 @@ namespace PetFamily.Domain.Volunteer
         public DateTime CreationDate { get; private set; }
 
         public static Result<Pet> Create(PetId petId, string byName,
-                                        string description, SpeciesAndBreed petSpeciesAndBreed,
-                                        DateTime dateOfBirth,
+                                        string description, DateTime dateOfBirth,
                                         string color, string petHealthInfo,
                                         float weight, float height,
                                         bool isNeutered, bool isVaccinated,
@@ -102,7 +101,7 @@ namespace PetFamily.Domain.Volunteer
                 return Result.Failure<Pet>($"Необходимо исправить следующие замечания:\r\n {FailureDescription}");
             }
 
-            var pet = new Pet(petId, byName, description, petSpeciesAndBreed, dateOfBirth,
+            var pet = new Pet(petId, byName, description, dateOfBirth,
                               color, petHealthInfo, weight, height,
                               isNeutered, isVaccinated, helpStatus, petAddress,
                               ownerPhoneNumber);

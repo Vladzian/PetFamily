@@ -8,15 +8,19 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Volunteer
 {
-    public class PetPhoto
+    public record PetPhoto
     {
+        private PetPhoto()
+        {
+            
+        }
         private PetPhoto(string path, bool isMainFoto)
         {
             Path = path;
             IsMain = isMainFoto;
         }
-        public string Path {get; private set; }
-        public bool IsMain { get; private set; }
+        public string Path {get; }
+        public bool IsMain { get; }
 
         public static Result<PetPhoto> Create(string path, bool isMainPhoto)
         {

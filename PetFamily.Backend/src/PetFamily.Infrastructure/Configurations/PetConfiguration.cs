@@ -14,12 +14,15 @@ namespace PetFamily.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Pet> builder)
         {
-            builder.ToTable(nameof(PetConfiguration));
+            builder.ToTable(nameof(Pet));
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Id)
                 .HasConversion(
                 id => id.Value,
-                value => EntityId<PetId>.Create(value));
+                value => PetId.Create(value));
+
+            builder.Property(p => p.SpecieId);
+            builder.Property(p => p.BreedId);
 
             builder.Property(p => p.ByName)
                 .IsRequired()
@@ -30,8 +33,40 @@ namespace PetFamily.Infrastructure.Configurations
 
             builder.Property(p => p.DateOfBirth)
                 .HasColumnType("date");
-
             
+            builder.Property(p => p.CreationDate)
+                .HasColumnType("date");
+
+            builder.Property(p => p.Color)
+                .HasMaxLength(Constants.MAX_COLOR_LENGHT);
+
+            builder.Property(p => p.PetHealthInfo)
+                .HasMaxLength(Constants.MAX_DESCRIPTION_LENGHT);
+
+            builder.Property(p => p.Weight);
+            builder.Property(p => p.Height);
+            builder.Property(p => p.IsNeutered);
+            builder.Property(p => p.IsVaccinated);
+                     
+
+            builder.OwnsOne(p => p.PetAddress, pa =>
+            {
+                pa.ToJson();
+            });
+
+            builder.Property(p => p.OwnerPhoneNumber)
+                .HasMaxLength(Constants.MAX_PHONENUMBER_LENGHT);
+
+            builder.OwnsMany(p => p.PetPhotos, ph =>
+            {
+                ph.ToJson();               
+            });
+
+            builder.OwnsMany(p => p.RequisitesForHelp, r =>
+            {
+                r.ToJson();
+            });
+
         }
     }
 }
