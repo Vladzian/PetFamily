@@ -30,7 +30,7 @@ namespace PetFamily.Domain.Volunteer
             Height = height;
             IsNeutered = isNeutered;
             IsVaccinated = isVaccinated;
-            HelpStatus = helpStatus;
+            PetHelpStatus = helpStatus;
             PetAddress = petAddress;
             OwnerPhoneNumber = ownerPhoneNumber;
 
@@ -48,16 +48,15 @@ namespace PetFamily.Domain.Volunteer
         public float Height { get; private set; }
         public bool IsNeutered { get; private set; }
         public bool IsVaccinated { get; private set; }
-        public HelpStatus HelpStatus { get; private set; } = HelpStatus.FoundAHome;
+        public HelpStatus PetHelpStatus { get; private set; }
         public Address PetAddress { get; private set; }
         public string PetAddressByString => Address.AddressByString(PetAddress);
         public string OwnerPhoneNumber { get; private set; }
+        public PetPhotos Photos {  get; }
+        public Requisites RequisitesForHelp { get; }
 
-        private readonly List<PetPhoto> _PetPhotos = [];
-        public IReadOnlyList<PetPhoto> PetPhotos => _PetPhotos;
-
-        private readonly List<RequisiteForHelp> _RequisitesForHelp = [];
-        public IReadOnlyList<RequisiteForHelp> RequisitesForHelp => _RequisitesForHelp;
+        //private readonly List<RequisiteForHelp> _RequisitesForHelp = [];
+        //public IReadOnlyList<RequisiteForHelp> RequisitesForHelp => _RequisitesForHelp;
         public DateTime CreationDate { get; private set; }
 
         public static Result<Pet> Create(PetId petId, string byName,
@@ -108,28 +107,18 @@ namespace PetFamily.Domain.Volunteer
             return Result.Success(pet);
         }
 
-        public Result<IReadOnlyList<RequisiteForHelp>> AddRequisiteForHelp(RequisiteForHelp _requisiteForHelp)
-        {
-            if (_RequisitesForHelp.Contains(_requisiteForHelp))
-                return Result.Failure<IReadOnlyList<RequisiteForHelp>>("Данный реквизит уже существует в списке.");
+        //public Result<IReadOnlyList<RequisiteForHelp>> AddRequisiteForHelp(RequisiteForHelp _requisiteForHelp)
+        //{
+        //    if (_RequisitesForHelp.Contains(_requisiteForHelp))
+        //        return Result.Failure<IReadOnlyList<RequisiteForHelp>>("Данный реквизит уже существует в списке.");
 
-            _RequisitesForHelp.Add(_requisiteForHelp);
-            return Result.Success(RequisitesForHelp);
-        }
+        //    _RequisitesForHelp.Add(_requisiteForHelp);
+        //    return Result.Success(RequisitesForHelp);
+        //}
         public Result<IReadOnlyList<PetPhoto>> AddPetPhoto(PetPhoto petPhoto)
         {
-            if (_PetPhotos.Contains(petPhoto))
-                return Result.Failure<IReadOnlyList<PetPhoto>>("Такое фото уже существует в коллекции питомца.");
-
-            _PetPhotos.Add(petPhoto);
-            return Result.Success(PetPhotos);
+            return Photos.AddPetPhoto(petPhoto);
         }
 
-    }
-    public enum HelpStatus //пока перечисление, но статусы могут меняться, стоит их завести как отдельную сущность в БД
-    {
-        NeedsHelp = 0,
-        LookingForAHome = 1,
-        FoundAHome = 2
     }   
 }

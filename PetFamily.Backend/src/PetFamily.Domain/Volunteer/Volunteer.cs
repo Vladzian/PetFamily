@@ -34,11 +34,11 @@ namespace PetFamily.Domain.Volunteer
         public byte Experience { get; private set; }
 
 
-        private readonly List<SocialMedia> _SocialMedias = [];
-        public IReadOnlyList<SocialMedia> SocialMedias => _SocialMedias;
+        public SocialMedias VolunteerSocialMedias {  get;  }
 
-        private readonly List<RequisiteForHelp> _RequisitesForHelp = [];
-        public IReadOnlyList<RequisiteForHelp> RequisitesForHelp => _RequisitesForHelp;
+        public Requisites RequisitesForHelp { get; }
+        //private readonly List<RequisiteForHelp> _RequisitesForHelp = [];
+        //public IReadOnlyList<RequisiteForHelp> RequisitesForHelp => _RequisitesForHelp;
 
         private readonly List<Pet> _Pets = [];
         public IReadOnlyList<Pet> Pets => _Pets;
@@ -49,7 +49,7 @@ namespace PetFamily.Domain.Volunteer
         }
         public ushort CountPetsByStatus(HelpStatus status) 
         {            
-            return (ushort)_Pets.Count(p => p.HelpStatus == status); 
+            return (ushort)_Pets.Count(p => p.PetHelpStatus == status); 
         }
         public ushort CountPetsFoundAHome() 
         {
@@ -71,6 +71,11 @@ namespace PetFamily.Domain.Volunteer
 
             _Pets.Add(pet);
             return Result.Success(Pets);
+        }
+
+        public Result<IReadOnlyList<SocialMedia>> AddSocialMedia(SocialMedia socialMedia)
+        {
+            return VolunteerSocialMedias.AddSocialMedia(socialMedia);
         }
 
         public static Result<Volunteer> Create(VolunteerId volunteerId, string fullName, 

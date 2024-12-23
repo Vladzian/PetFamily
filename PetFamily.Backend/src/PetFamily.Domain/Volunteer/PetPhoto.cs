@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
@@ -10,16 +11,17 @@ namespace PetFamily.Domain.Volunteer
 {
     public record PetPhoto
     {
-        private PetPhoto()
-        {
-            
-        }
+        public const int MAX_PATH_LENGHT = 255;
+
+        protected PetPhoto(){}
+
         private PetPhoto(string path, bool isMainFoto)
         {
             Path = path;
             IsMain = isMainFoto;
         }
-        public string Path {get; }
+
+        public string Path { get; }
         public bool IsMain { get; }
 
         public static Result<PetPhoto> Create(string path, bool isMainPhoto)
@@ -31,4 +33,20 @@ namespace PetFamily.Domain.Volunteer
             return Result.Success(petPhoto);
         }
     }
+
+    public record PetPhotos
+    {
+        private readonly List<PetPhoto> _PetPhotos = [];
+        public IReadOnlyList<PetPhoto> ListPhotos => _PetPhotos;
+
+        public Result<IReadOnlyList<PetPhoto>> AddPetPhoto(PetPhoto petPhoto)
+        {
+            if (_PetPhotos.Contains(petPhoto))
+                return Result.Failure<IReadOnlyList<PetPhoto>>("Такое фото уже существует в коллекции питомца.");
+
+            _PetPhotos.Add(petPhoto);
+            return Result.Success(ListPhotos);
+        }
+    }
+    
 }

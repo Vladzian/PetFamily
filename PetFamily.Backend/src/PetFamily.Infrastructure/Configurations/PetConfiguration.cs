@@ -21,8 +21,8 @@ namespace PetFamily.Infrastructure.Configurations
                 id => id.Value,
                 value => PetId.Create(value));
 
-            builder.Property(p => p.SpecieId);
-            builder.Property(p => p.BreedId);
+            builder.Property(p => p.SpecieId).HasColumnName("specie_id");
+            builder.Property(p => p.BreedId).HasColumnName("breed_id");
 
             builder.Property(p => p.ByName)
                 .IsRequired()
@@ -47,24 +47,40 @@ namespace PetFamily.Infrastructure.Configurations
             builder.Property(p => p.Height);
             builder.Property(p => p.IsNeutered);
             builder.Property(p => p.IsVaccinated);
-                     
+
+            builder.Property(p => p.PetHelpStatus)
+                   .IsRequired()
+                   .HasColumnName("help_status"); 
+
 
             builder.OwnsOne(p => p.PetAddress, pa =>
             {
-                pa.ToJson();
+                pa.ToJson();  
+            });
+
+            builder.OwnsOne(p => p.Photos, ph =>
+            {
+                ph.ToJson();
+                ph.OwnsMany(ph => ph.ListPhotos, lPh => 
+                {
+                    lPh.Property(l => l.Path)
+                        .IsRequired()
+                        .HasMaxLength(PetPhoto.MAX_PATH_LENGHT);
+                    lPh.Property(l => l.IsMain);
+                });
             });
 
             builder.Property(p => p.OwnerPhoneNumber)
                 .HasMaxLength(Constants.MAX_PHONENUMBER_LENGHT);
-
-            builder.OwnsMany(p => p.PetPhotos, ph =>
-            {
-                ph.ToJson();               
-            });
-
-            builder.OwnsMany(p => p.RequisitesForHelp, r =>
+           
+            builder.OwnsOne(p => p.RequisitesForHelp, r =>
             {
                 r.ToJson();
+                r.OwnsMany(r => r.RequisitesForHelp, rh => 
+                {
+                    rh.Property(rh => rh.Name);
+                    rh.Property(rh => rh.Description);
+                });
             });
 
         }

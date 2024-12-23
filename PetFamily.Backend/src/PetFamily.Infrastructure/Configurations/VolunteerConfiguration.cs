@@ -43,14 +43,26 @@ namespace PetFamily.Infrastructure.Configurations
                 .WithOne()
                 .HasForeignKey("volunteer_id");
 
-            builder.OwnsMany(v => v.SocialMedias, sm =>
+            builder.OwnsOne(v => v.VolunteerSocialMedias, vsm =>
             {
-                sm.ToJson();
+                vsm.ToJson();
+                vsm.OwnsMany(vsm => vsm.ListSocialMedia, lsm => 
+                {
+                    lsm.Property(sm => sm.Name)
+                        .IsRequired()
+                        .HasMaxLength(SocialMedia.MAX_NAME_LENGHT);
+                    lsm.Property(sm => sm.Link).IsRequired();
+                });
             });
 
-            builder.OwnsMany(v => v.RequisitesForHelp, rh =>
-            { 
-                rh.ToJson();
+            builder.OwnsOne(p => p.RequisitesForHelp, r =>
+            {
+                r.ToJson();
+                r.OwnsMany(r => r.RequisitesForHelp, rh =>
+                {
+                    rh.Property(rh => rh.Name);
+                    rh.Property(rh => rh.Description);
+                });
             });
         }
     }

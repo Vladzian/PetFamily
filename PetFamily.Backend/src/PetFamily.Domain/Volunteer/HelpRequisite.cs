@@ -6,20 +6,22 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Volunteer
 {
-    public class RequisiteForHelp
+    public record HelpRequisite
     {
-        //for ef core
-        private RequisiteForHelp()
-        {
-            
-        }
-        public RequisiteForHelp(string name, string desc)
+        protected HelpRequisite(){}
+        public HelpRequisite(string name, string desc)
         {
             Name = name;
             Description = desc;
         }
-
         public string Name { get; }
         public string Description { get; }
+    }
+
+    public record Requisites
+    {
+        protected Requisites() { }
+        public IReadOnlyList<HelpRequisite> RequisitesForHelp { get; }
+
     }
 }
