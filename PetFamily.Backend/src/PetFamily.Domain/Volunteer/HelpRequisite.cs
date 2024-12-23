@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CSharpFunctionalExtensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,18 @@ namespace PetFamily.Domain.Volunteer
     public record Requisites
     {
         protected Requisites() { }
-        public IReadOnlyList<HelpRequisite> RequisitesForHelp { get; }
+
+        private readonly List<HelpRequisite> _RequisitesForHelp = [];
+        public IReadOnlyList<HelpRequisite> RequisitesForHelp => _RequisitesForHelp;
+
+        public Result<IReadOnlyList<HelpRequisite>> AddHelpRequisite(HelpRequisite helpRequisite)
+        {
+            if (_RequisitesForHelp.Contains(helpRequisite))
+                return Result.Failure<IReadOnlyList<HelpRequisite>>("Данный реквизит уже существует в списке.");
+
+            _RequisitesForHelp.Add(helpRequisite);
+            return Result.Success(RequisitesForHelp);
+        }
 
     }
 }

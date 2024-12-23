@@ -33,8 +33,8 @@ namespace PetFamily.Infrastructure.Migrations
                     general_description = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
                     phone_number = table.Column<string>(type: "character(20)", maxLength: 20, nullable: false),
                     experience = table.Column<byte>(type: "smallint", nullable: false),
-                    RequisitesForHelp = table.Column<string>(type: "jsonb", nullable: false),
-                    VolunteerSocialMedias = table.Column<string>(type: "jsonb", nullable: false)
+                    requisites_for_help = table.Column<string>(type: "jsonb", nullable: false),
+                    social_medias = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,13 +76,13 @@ namespace PetFamily.Infrastructure.Migrations
                     height = table.Column<float>(type: "real", nullable: false),
                     is_neutered = table.Column<bool>(type: "boolean", nullable: false),
                     is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
-                    help_status = table.Column<int>(type: "integer", nullable: false),
+                    help_status = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
                     owner_phone_number = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     creation_date = table.Column<DateTime>(type: "date", nullable: false),
                     volunteer_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    PetAddress = table.Column<string>(type: "jsonb", nullable: false),
-                    Photos = table.Column<string>(type: "jsonb", nullable: false),
-                    RequisitesForHelp = table.Column<string>(type: "jsonb", nullable: false)
+                    address = table.Column<string>(type: "jsonb", nullable: false),
+                    photos = table.Column<string>(type: "jsonb", nullable: false),
+                    requisites_for_help = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
                 {

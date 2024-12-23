@@ -18,10 +18,9 @@ namespace PetFamily.Domain.Species
         {           
             Name = name;
         }
-
         public string Name {  get; private set; }
-        public SpeciesId SpeciesId { get; private set; }
-        public Species Species { get; private set; }
+        public SpeciesId SpeciesId { get; }
+        public Species Species { get;  }
 
         public static Result<Breed> Create(BreedId breedId, string name) 
         {

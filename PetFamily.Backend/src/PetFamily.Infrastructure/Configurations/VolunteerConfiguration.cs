@@ -21,6 +21,7 @@ namespace PetFamily.Infrastructure.Configurations
                 .HasConversion(
                     id => id.Value,
                     value => VolunteerId.Create(value));
+
             builder.Property(v => v.FullName)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_FULLNAME_LENGHT);
@@ -36,6 +37,7 @@ namespace PetFamily.Infrastructure.Configurations
             builder.Property(v => v.PhoneNumber)
                 .HasColumnType("character")
                 .HasMaxLength(Constants.MAX_PHONENUMBER_LENGHT);
+
             builder.Property(v => v.Experience)
                 .HasColumnType("smallint");
 
@@ -43,21 +45,23 @@ namespace PetFamily.Infrastructure.Configurations
                 .WithOne()
                 .HasForeignKey("volunteer_id");
 
-            builder.OwnsOne(v => v.VolunteerSocialMedias, vsm =>
+            builder.OwnsOne(v => v.SocialMedias, vsm =>
             {
-                vsm.ToJson();
+                vsm.ToJson("social_medias");
                 vsm.OwnsMany(vsm => vsm.ListSocialMedia, lsm => 
                 {
                     lsm.Property(sm => sm.Name)
                         .IsRequired()
                         .HasMaxLength(SocialMedia.MAX_NAME_LENGHT);
-                    lsm.Property(sm => sm.Link).IsRequired();
+
+                    lsm.Property(sm => sm.Link)
+                        .IsRequired();
                 });
             });
 
             builder.OwnsOne(p => p.RequisitesForHelp, r =>
             {
-                r.ToJson();
+                r.ToJson("requisites_for_help");
                 r.OwnsMany(r => r.RequisitesForHelp, rh =>
                 {
                     rh.Property(rh => rh.Name);

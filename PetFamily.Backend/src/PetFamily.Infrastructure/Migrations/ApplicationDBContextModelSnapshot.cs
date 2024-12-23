@@ -105,6 +105,12 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasColumnType("real")
                         .HasColumnName("height");
 
+                    b.Property<int>("HelpStatus")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0)
+                        .HasColumnName("help_status");
+
                     b.Property<bool>("IsNeutered")
                         .HasColumnType("boolean")
                         .HasColumnName("is_neutered");
@@ -124,10 +130,6 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)")
                         .HasColumnName("pet_health_info");
-
-                    b.Property<int>("PetHelpStatus")
-                        .HasColumnType("integer")
-                        .HasColumnName("help_status");
 
                     b.Property<Guid?>("SpecieId")
                         .HasColumnType("uuid")
@@ -209,7 +211,7 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasForeignKey("volunteer_id")
                         .HasConstraintName("fk_pet_volunteer_volunteer_id");
 
-                    b.OwnsOne("PetFamily.Domain.Shared.Address", "PetAddress", b1 =>
+                    b.OwnsOne("PetFamily.Domain.Shared.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("PetId")
                                 .HasColumnType("uuid")
@@ -219,7 +221,7 @@ namespace PetFamily.Infrastructure.Migrations
 
                             b1.ToTable("Pet");
 
-                            b1.ToJson("PetAddress");
+                            b1.ToJson("address");
 
                             b1.WithOwner()
                                 .HasForeignKey("PetId")
@@ -236,7 +238,7 @@ namespace PetFamily.Infrastructure.Migrations
 
                             b1.ToTable("Pet");
 
-                            b1.ToJson("RequisitesForHelp");
+                            b1.ToJson("requisites_for_help");
 
                             b1.WithOwner()
                                 .HasForeignKey("PetId")
@@ -282,7 +284,7 @@ namespace PetFamily.Infrastructure.Migrations
 
                             b1.ToTable("Pet");
 
-                            b1.ToJson("Photos");
+                            b1.ToJson("photos");
 
                             b1.WithOwner()
                                 .HasForeignKey("PetId")
@@ -318,7 +320,7 @@ namespace PetFamily.Infrastructure.Migrations
                             b1.Navigation("ListPhotos");
                         });
 
-                    b.Navigation("PetAddress")
+                    b.Navigation("Address")
                         .IsRequired();
 
                     b.Navigation("Photos")
@@ -330,7 +332,7 @@ namespace PetFamily.Infrastructure.Migrations
 
             modelBuilder.Entity("PetFamily.Domain.Volunteer.Volunteer", b =>
                 {
-                    b.OwnsOne("PetFamily.Domain.Volunteer.SocialMedias", "VolunteerSocialMedias", b1 =>
+                    b.OwnsOne("PetFamily.Domain.Volunteer.SocialMedias", "SocialMedias", b1 =>
                         {
                             b1.Property<Guid>("VolunteerId")
                                 .HasColumnType("uuid")
@@ -340,7 +342,7 @@ namespace PetFamily.Infrastructure.Migrations
 
                             b1.ToTable("Volunteer");
 
-                            b1.ToJson("VolunteerSocialMedias");
+                            b1.ToJson("social_medias");
 
                             b1.WithOwner()
                                 .HasForeignKey("VolunteerId")
@@ -387,7 +389,7 @@ namespace PetFamily.Infrastructure.Migrations
 
                             b1.ToTable("Volunteer");
 
-                            b1.ToJson("RequisitesForHelp");
+                            b1.ToJson("requisites_for_help");
 
                             b1.WithOwner()
                                 .HasForeignKey("VolunteerId")
@@ -426,7 +428,7 @@ namespace PetFamily.Infrastructure.Migrations
                     b.Navigation("RequisitesForHelp")
                         .IsRequired();
 
-                    b.Navigation("VolunteerSocialMedias")
+                    b.Navigation("SocialMedias")
                         .IsRequired();
                 });
 

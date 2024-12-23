@@ -33,12 +33,9 @@ namespace PetFamily.Domain.Volunteer
         public string PhoneNumber { get; private set; }
         public byte Experience { get; private set; }
 
-
-        public SocialMedias VolunteerSocialMedias {  get;  }
+        public SocialMedias SocialMedias {  get;  }
 
         public Requisites RequisitesForHelp { get; }
-        //private readonly List<RequisiteForHelp> _RequisitesForHelp = [];
-        //public IReadOnlyList<RequisiteForHelp> RequisitesForHelp => _RequisitesForHelp;
 
         private readonly List<Pet> _Pets = [];
         public IReadOnlyList<Pet> Pets => _Pets;
@@ -49,7 +46,7 @@ namespace PetFamily.Domain.Volunteer
         }
         public ushort CountPetsByStatus(HelpStatus status) 
         {            
-            return (ushort)_Pets.Count(p => p.PetHelpStatus == status); 
+            return (ushort)_Pets.Count(p => p.HelpStatus == status); 
         }
         public ushort CountPetsFoundAHome() 
         {
@@ -72,10 +69,14 @@ namespace PetFamily.Domain.Volunteer
             _Pets.Add(pet);
             return Result.Success(Pets);
         }
+        public Result<IReadOnlyList<HelpRequisite>> AddRequisiteForHelp(HelpRequisite _requisiteForHelp)
+        {
+            return RequisitesForHelp.AddHelpRequisite(_requisiteForHelp);
+        }
 
         public Result<IReadOnlyList<SocialMedia>> AddSocialMedia(SocialMedia socialMedia)
         {
-            return VolunteerSocialMedias.AddSocialMedia(socialMedia);
+            return SocialMedias.AddSocialMedia(socialMedia);
         }
 
         public static Result<Volunteer> Create(VolunteerId volunteerId, string fullName, 

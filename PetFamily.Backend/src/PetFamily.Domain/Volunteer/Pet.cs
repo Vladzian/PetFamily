@@ -30,8 +30,8 @@ namespace PetFamily.Domain.Volunteer
             Height = height;
             IsNeutered = isNeutered;
             IsVaccinated = isVaccinated;
-            PetHelpStatus = helpStatus;
-            PetAddress = petAddress;
+            HelpStatus = helpStatus;
+            Address = petAddress;
             OwnerPhoneNumber = ownerPhoneNumber;
 
             CreationDate = DateTime.UtcNow;
@@ -40,23 +40,20 @@ namespace PetFamily.Domain.Volunteer
         public string ByName { get; private set; }
         public string Description { get; private set; } = string.Empty;
         public DateTime DateOfBirth { get; private set; } = default!;
-        public Guid? SpecieId {  get; private set; } 
-        public Guid? BreedId {  get; private set; }        
+        public Guid? SpecieId {  get; } 
+        public Guid? BreedId {  get; }        
         public string Color { get; private set; } = null!;
         public string PetHealthInfo { get; private set; } = string.Empty;
         public float Weight { get; private set; }
         public float Height { get; private set; }
         public bool IsNeutered { get; private set; }
         public bool IsVaccinated { get; private set; }
-        public HelpStatus PetHelpStatus { get; private set; }
-        public Address PetAddress { get; private set; }
-        public string PetAddressByString => Address.AddressByString(PetAddress);
+        public HelpStatus HelpStatus { get; private set; }
+        public Address Address { get; private set; }
+        public string PetAddressByString => Address.AddressByString(Address);
         public string OwnerPhoneNumber { get; private set; }
         public PetPhotos Photos {  get; }
         public Requisites RequisitesForHelp { get; }
-
-        //private readonly List<RequisiteForHelp> _RequisitesForHelp = [];
-        //public IReadOnlyList<RequisiteForHelp> RequisitesForHelp => _RequisitesForHelp;
         public DateTime CreationDate { get; private set; }
 
         public static Result<Pet> Create(PetId petId, string byName,
@@ -107,14 +104,10 @@ namespace PetFamily.Domain.Volunteer
             return Result.Success(pet);
         }
 
-        //public Result<IReadOnlyList<RequisiteForHelp>> AddRequisiteForHelp(RequisiteForHelp _requisiteForHelp)
-        //{
-        //    if (_RequisitesForHelp.Contains(_requisiteForHelp))
-        //        return Result.Failure<IReadOnlyList<RequisiteForHelp>>("Данный реквизит уже существует в списке.");
-
-        //    _RequisitesForHelp.Add(_requisiteForHelp);
-        //    return Result.Success(RequisitesForHelp);
-        //}
+        public Result<IReadOnlyList<HelpRequisite>> AddRequisiteForHelp(HelpRequisite _requisiteForHelp)
+        {
+            return RequisitesForHelp.AddHelpRequisite(_requisiteForHelp);
+        }
         public Result<IReadOnlyList<PetPhoto>> AddPetPhoto(PetPhoto petPhoto)
         {
             return Photos.AddPetPhoto(petPhoto);

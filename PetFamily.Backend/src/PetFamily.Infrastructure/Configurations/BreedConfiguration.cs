@@ -21,6 +21,7 @@ namespace PetFamily.Infrastructure.Configurations
                 .HasConversion(
                     id => id.Value,
                     value => BreedId.Create(value));
+
             builder.Property(v => v.Name)
                 .HasMaxLength(Constants.MAX_FULLNAME_LENGHT)
                 .IsRequired();             

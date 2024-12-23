@@ -21,8 +21,10 @@ namespace PetFamily.Infrastructure.Configurations
                 id => id.Value,
                 value => PetId.Create(value));
 
-            builder.Property(p => p.SpecieId).HasColumnName("specie_id");
-            builder.Property(p => p.BreedId).HasColumnName("breed_id");
+            builder.Property(p => p.SpecieId)
+                .HasColumnName("specie_id");
+            builder.Property(p => p.BreedId)
+                .HasColumnName("breed_id");
 
             builder.Property(p => p.ByName)
                 .IsRequired()
@@ -48,19 +50,20 @@ namespace PetFamily.Infrastructure.Configurations
             builder.Property(p => p.IsNeutered);
             builder.Property(p => p.IsVaccinated);
 
-            builder.Property(p => p.PetHelpStatus)
+            builder.Property(p => p.HelpStatus)
                    .IsRequired()
+                   .HasDefaultValue(HelpStatus.NeedsHelp)
                    .HasColumnName("help_status"); 
 
 
-            builder.OwnsOne(p => p.PetAddress, pa =>
+            builder.OwnsOne(p => p.Address, pa =>
             {
-                pa.ToJson();  
+                pa.ToJson("address");  
             });
 
             builder.OwnsOne(p => p.Photos, ph =>
             {
-                ph.ToJson();
+                ph.ToJson("photos");
                 ph.OwnsMany(ph => ph.ListPhotos, lPh => 
                 {
                     lPh.Property(l => l.Path)
@@ -75,7 +78,7 @@ namespace PetFamily.Infrastructure.Configurations
            
             builder.OwnsOne(p => p.RequisitesForHelp, r =>
             {
-                r.ToJson();
+                r.ToJson("requisites_for_help");
                 r.OwnsMany(r => r.RequisitesForHelp, rh => 
                 {
                     rh.Property(rh => rh.Name);
