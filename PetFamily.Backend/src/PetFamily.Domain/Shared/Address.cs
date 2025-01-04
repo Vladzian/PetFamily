@@ -2,6 +2,7 @@
 using PetFamily.Domain.Volunteer;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.Metrics;
 using System.IO;
 using System.Linq;
@@ -11,18 +12,10 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Shared
 {
-    //пока для простоты просто структура с полями. 
-    //стоит заводить сущностями в БД, может отдельной - адресный классификатор, чтобы можно было фильтровать по стране/области/городу
-    //ну или это все такие ValueObject
-    public class Address 
+    [NotMapped]
+    public record Address 
     {
-        public string Building { get; }
-        public string Street { get; }
-        public string City { get; }
-        public string State { get;}
-        public string Country { get; }
-        public string IndexCode { get; }
-
+        protected Address(){}
         private Address(string street, string city, string state, string country,string building, string indexCode)
         {
             Building = building;
@@ -32,8 +25,14 @@ namespace PetFamily.Domain.Shared
             Country = country;
             IndexCode = indexCode;
         }
+        public string Building { get; }
+        public string Street { get; }
+        public string City { get; }
+        public string State { get; }
+        public string Country { get; }
+        public string IndexCode { get; }
 
-        public static Address NewAddress(string street, string city, string state, string country, string building, string indexCode) 
+        public static Address Create(string street, string city, string state, string country, string building, string indexCode) 
             => new(street, city,state, country, building, indexCode);
         public static string AddressByString(Address address)
         {

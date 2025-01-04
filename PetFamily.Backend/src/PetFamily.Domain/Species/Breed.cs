@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Species
 {
-    public class Breed : Entity<BreedId>
+    public class Breed : Shared.Entity<BreedId>
     {
         //for ef core
-        private Breed() : base()
+        private Breed(BreedId id) : base(id)
         {
         }
-        private Breed(BreedId breedId, string name) 
-        {
-            Id = breedId;
+        public Breed(BreedId breedId, string name) : base(breedId)
+        {           
             Name = name;
         }
-
         public string Name {  get; private set; }
+        public SpeciesId SpeciesId { get; }
+        public Species Species { get;  }
 
         public static Result<Breed> Create(BreedId breedId, string name) 
         {

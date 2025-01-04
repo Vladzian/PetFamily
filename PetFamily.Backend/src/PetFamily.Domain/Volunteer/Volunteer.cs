@@ -11,17 +11,16 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace PetFamily.Domain.Volunteer
 {
-    public class Volunteer : Entity<VolunteerId>
+    public sealed class Volunteer : Shared.Entity<VolunteerId>
     {
         //for ef core
-        private Volunteer() : base()
+        private Volunteer(VolunteerId id) : base(id)
         {            
         }
         public Volunteer(VolunteerId volunteerId, string fullName,
                          string email, string generalDescription, 
-                         string phoneNumber, byte experience) : base()
-        {
-            Id = volunteerId;
+                         string phoneNumber, byte experience) : base(volunteerId)
+        {      
             FullName = fullName;
             Email = email;
             GeneralDescription = generalDescription;
@@ -34,12 +33,9 @@ namespace PetFamily.Domain.Volunteer
         public string PhoneNumber { get; private set; }
         public byte Experience { get; private set; }
 
+        public SocialMedias SocialMedias {  get;  }
 
-        private readonly List<SocialMedia> _SocialMedias = [];
-        public IReadOnlyList<SocialMedia> SocialMedias => _SocialMedias;
-
-        private readonly List<RequisiteForHelp> _RequisitesForHelp = [];
-        public IReadOnlyList<RequisiteForHelp> RequisitesForHelp => _RequisitesForHelp;
+        public Requisites RequisitesForHelp { get; }
 
         private readonly List<Pet> _Pets = [];
         public IReadOnlyList<Pet> Pets => _Pets;
@@ -72,6 +68,15 @@ namespace PetFamily.Domain.Volunteer
 
             _Pets.Add(pet);
             return Result.Success(Pets);
+        }
+        public Result<IReadOnlyList<HelpRequisite>> AddRequisiteForHelp(HelpRequisite _requisiteForHelp)
+        {
+            return RequisitesForHelp.AddHelpRequisite(_requisiteForHelp);
+        }
+
+        public Result<IReadOnlyList<SocialMedia>> AddSocialMedia(SocialMedia socialMedia)
+        {
+            return SocialMedias.AddSocialMedia(socialMedia);
         }
 
         public static Result<Volunteer> Create(VolunteerId volunteerId, string fullName, 
@@ -107,16 +112,5 @@ namespace PetFamily.Domain.Volunteer
             var volunteer = new Volunteer(volunteerId, fullName, email, generalDescription, phoneNumber, experience);
             return Result.Success(volunteer);
         }
-    }
-
-    public class SocialMedia
-    {
-        public SocialMedia(string name, string link)
-        {
-            Name = name;
-            Link = link;
-        }
-        public string Name { get; private set; }
-        public string Link { get; private set; }
     }
 }

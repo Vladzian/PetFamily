@@ -2,28 +2,27 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.Species;
 
 namespace PetFamily.Domain.Volunteer
 {
-    public class Pet : Entity<PetId>
+    public class Pet : Shared.Entity<PetId>
     {
         //for ef core
-        private Pet() : base()
+        private Pet(PetId id) : base(id)
         {
         }
 
         private Pet(PetId petId, string byName,
-                    string description, SpeciesAndBreed petSpeciesAndBreed , DateTime dateOfBirth,
+                    string description, DateTime dateOfBirth,
                     string color, string petHealthInfo,
                     float weight, float height,
                     bool isNeutered, bool isVaccinated,
                     HelpStatus helpStatus, Address petAddress,
-                    string ownerPhoneNumber) : base()
-        {
-            Id = petId;
+                    string ownerPhoneNumber) : base(petId)
+        {           
             ByName = byName;
-            Description = description;
-            PetSpeciesAndBreed = petSpeciesAndBreed;
+            Description = description;            
             DateOfBirth = dateOfBirth;
             Color = color;
             PetHealthInfo = petHealthInfo;
@@ -32,7 +31,7 @@ namespace PetFamily.Domain.Volunteer
             IsNeutered = isNeutered;
             IsVaccinated = isVaccinated;
             HelpStatus = helpStatus;
-            PetAddress = petAddress;
+            Address = petAddress;
             OwnerPhoneNumber = ownerPhoneNumber;
 
             CreationDate = DateTime.UtcNow;
@@ -41,28 +40,24 @@ namespace PetFamily.Domain.Volunteer
         public string ByName { get; private set; }
         public string Description { get; private set; } = string.Empty;
         public DateTime DateOfBirth { get; private set; } = default!;
-        public SpeciesAndBreed PetSpeciesAndBreed {  get; private set; }
+        public Guid? SpecieId {  get; } 
+        public Guid? BreedId {  get; }        
         public string Color { get; private set; } = null!;
         public string PetHealthInfo { get; private set; } = string.Empty;
         public float Weight { get; private set; }
         public float Height { get; private set; }
         public bool IsNeutered { get; private set; }
         public bool IsVaccinated { get; private set; }
-        public HelpStatus HelpStatus { get; private set; } = HelpStatus.FoundAHome;
-        public Address PetAddress { get; private set; }
-        public string PetAddressByString => Address.AddressByString(PetAddress);
+        public HelpStatus HelpStatus { get; private set; }
+        public Address Address { get; private set; }
+        public string PetAddressByString => Address.AddressByString(Address);
         public string OwnerPhoneNumber { get; private set; }
-
-        private readonly List<PetPhoto> _PetPhotos = [];
-        public IReadOnlyList<PetPhoto> PetPhotos => _PetPhotos;
-
-        private readonly List<RequisiteForHelp> _RequisitesForHelp = [];
-        public IReadOnlyList<RequisiteForHelp> RequisitesForHelp => _RequisitesForHelp;
+        public PetPhotos Photos {  get; }
+        public Requisites RequisitesForHelp { get; }
         public DateTime CreationDate { get; private set; }
 
         public static Result<Pet> Create(PetId petId, string byName,
-                                        string description, SpeciesAndBreed petSpeciesAndBreed,
-                                        DateTime dateOfBirth,
+                                        string description, DateTime dateOfBirth,
                                         string color, string petHealthInfo,
                                         float weight, float height,
                                         bool isNeutered, bool isVaccinated,
@@ -102,35 +97,21 @@ namespace PetFamily.Domain.Volunteer
                 return Result.Failure<Pet>($"Необходимо исправить следующие замечания:\r\n {FailureDescription}");
             }
 
-            var pet = new Pet(petId, byName, description, petSpeciesAndBreed, dateOfBirth,
+            var pet = new Pet(petId, byName, description, dateOfBirth,
                               color, petHealthInfo, weight, height,
                               isNeutered, isVaccinated, helpStatus, petAddress,
                               ownerPhoneNumber);
             return Result.Success(pet);
         }
 
-        public Result<IReadOnlyList<RequisiteForHelp>> AddRequisiteForHelp(RequisiteForHelp _requisiteForHelp)
+        public Result<IReadOnlyList<HelpRequisite>> AddRequisiteForHelp(HelpRequisite _requisiteForHelp)
         {
-            if (_RequisitesForHelp.Contains(_requisiteForHelp))
-                return Result.Failure<IReadOnlyList<RequisiteForHelp>>("Данный реквизит уже существует в списке.");
-
-            _RequisitesForHelp.Add(_requisiteForHelp);
-            return Result.Success(RequisitesForHelp);
+            return RequisitesForHelp.AddHelpRequisite(_requisiteForHelp);
         }
         public Result<IReadOnlyList<PetPhoto>> AddPetPhoto(PetPhoto petPhoto)
         {
-            if (_PetPhotos.Contains(petPhoto))
-                return Result.Failure<IReadOnlyList<PetPhoto>>("Такое фото уже существует в коллекции питомца.");
-
-            _PetPhotos.Add(petPhoto);
-            return Result.Success(PetPhotos);
+            return Photos.AddPetPhoto(petPhoto);
         }
 
-    }
-    public enum HelpStatus //пока перечисление, но статусы могут меняться, стоит их завести как отдельную сущность в БД
-    {
-        NeedsHelp = 0,
-        LookingForAHome = 1,
-        FoundAHome = 2
     }   
 }
