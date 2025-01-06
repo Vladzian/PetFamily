@@ -28,5 +28,7 @@ namespace PetFamily.Domain.Volunteer
             _SocialMedias.Add(socialMedia);
             return Result.Success(ListSocialMedia);
         }
+
+        public static SocialMedias Create() => new();
     }
 }
