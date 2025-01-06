@@ -10,7 +10,7 @@ namespace PetFamily.API.Controllers
     {
         [HttpPost]
         public async Task<IActionResult> Create([FromServices] CreateVolunteerHandler createVolunteerHandler,
-                                                [FromBody] CreateVolunteerRequest request,
+                                                [FromBody] CreateVolunteerCommand request,
                                                 CancellationToken cancellationToken = default)
         {
             var result = await createVolunteerHandler.HandleAsync(request, cancellationToken);

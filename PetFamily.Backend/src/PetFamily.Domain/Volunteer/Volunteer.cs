@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -57,12 +58,12 @@ namespace PetFamily.Domain.Volunteer
             _Pets.Add(pet);
             return Result.Success(Pets);
         }
-        public Result<IReadOnlyList<HelpRequisite>> AddRequisiteForHelp(HelpRequisite _requisiteForHelp)
+        public Result<IReadOnlyList<HelpRequisite>, Error> AddRequisiteForHelp(HelpRequisite _requisiteForHelp)
         {
             return RequisitesForHelp.AddHelpRequisite(_requisiteForHelp);
         }
 
-        public Result<IReadOnlyList<SocialMedia>> AddSocialMedia(SocialMedia socialMedia)
+        public Result<IReadOnlyList<SocialMedia> , Error> AddSocialMedia(SocialMedia socialMedia)
         {
             return SocialMedias.AddSocialMedia(socialMedia);
         }

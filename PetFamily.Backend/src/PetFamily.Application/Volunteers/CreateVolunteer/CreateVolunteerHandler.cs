@@ -13,7 +13,7 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
             _volunteersRepository = volunteersRepository;
         }        
 
-        public async Task<Result<Guid,Error>> HandleAsync(CreateVolunteerRequest request, CancellationToken cancellationToken = default)
+        public async Task<Result<Guid,Error>> HandleAsync(CreateVolunteerCommand request, CancellationToken cancellationToken = default)
         {
             //валидируем VO
             var volunteerId = VolunteerId.NewEntityId();
@@ -28,9 +28,28 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
             //создаем доменную сущность
             var volunteer = Volunteer.Create(volunteerId, volunteerFullName.Value, volunteerInfo.Value);
 
+            if(request.socialMedias.Count > 0)
+            {
+                foreach (var socialMedia in request.socialMedias)
+                {
+                    var result = volunteer.AddSocialMedia(new SocialMedia(socialMedia.name, socialMedia.link));
+                    if (result.IsFailure)
+                        return result.Error;
+                }               
+            }
+
+            if (request.helpRequisites.Count > 0)
+            {
+                foreach ( var helpRequisite in request.helpRequisites)
+                {
+                    var result = volunteer.AddRequisiteForHelp(new HelpRequisite(helpRequisite.name, helpRequisite.desc));
+                    if (result.IsFailure)
+                        return result.Error;
+                }
+            }
+
             //вызываем сохранение в БД при помощи репозитория
             var guidVolunteer = await _volunteersRepository.Add(volunteer, cancellationToken);
-
             return guidVolunteer;
         }
     }

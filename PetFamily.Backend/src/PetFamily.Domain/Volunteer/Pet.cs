@@ -33,7 +33,7 @@ namespace PetFamily.Domain.Volunteer
         public PetPhotos Photos {  get; }
         public Requisites RequisitesForHelp { get; }
 
-        public static Result<Pet> Create(PetId petId, PetByName byName, 
+        public static Result<Pet, Error> Create(PetId petId, PetByName byName, 
                                          PetInfo info, PetSpecie? specie,  
                                          Address petAddress)
         {
@@ -43,15 +43,14 @@ namespace PetFamily.Domain.Volunteer
             else
                 speciePet = specie;
 
-            var pet = new Pet(petId, byName, info, speciePet, petAddress);
-            return Result.Success(pet);
+            return new Pet(petId, byName, info, speciePet, petAddress);
         }
 
-        public Result<IReadOnlyList<HelpRequisite>> AddRequisiteForHelp(HelpRequisite _requisiteForHelp)
+        public Result<IReadOnlyList<HelpRequisite>,Error> AddRequisiteForHelp(HelpRequisite _requisiteForHelp)
         {
             return RequisitesForHelp.AddHelpRequisite(_requisiteForHelp);
         }
-        public Result<IReadOnlyList<PetPhoto>> AddPetPhoto(PetPhoto petPhoto)
+        public Result<IReadOnlyList<PetPhoto>, Error> AddPetPhoto(PetPhoto petPhoto)
         {
             return Photos.AddPetPhoto(petPhoto);
         }
