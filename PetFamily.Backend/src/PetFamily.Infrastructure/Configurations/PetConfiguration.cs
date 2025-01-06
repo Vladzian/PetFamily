@@ -2,11 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Volunteer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PetFamily.Infrastructure.Configurations
 {
@@ -21,50 +16,85 @@ namespace PetFamily.Infrastructure.Configurations
                 id => id.Value,
                 value => PetId.Create(value));
 
-            builder.Property(p => p.SpecieId)
-                .HasColumnName("specie_id");
-            builder.Property(p => p.BreedId)
-                .HasColumnName("breed_id");
+            builder.ComplexProperty(p => p.Specie, specieBuilder =>
+            {
+                specieBuilder.Property(s => s.SpecieId)
+                            .IsRequired(false)
+                            .HasColumnType("uuid")
+                            .HasColumnName("specie_id");
 
-            builder.Property(p => p.ByName)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_FULLNAME_LENGHT);
+                specieBuilder.Property(s => s.BreedId)
+                            .IsRequired(false)
+                            .HasColumnType("uuid")
+                            .HasColumnName("breed_id");
+            });
 
-            builder.Property(p => p.Description)
-                .HasMaxLength(Constants.MAX_DESCRIPTION_LENGHT);
 
-            builder.Property(p => p.DateOfBirth)
-                .HasColumnType("date");
-            
+            builder.ComplexProperty(p => p.ByName, byNameBuilder =>
+            {
+                byNameBuilder.Property(fn => fn.Value)
+                             .IsRequired()
+                             .HasMaxLength(Constants.MAX_FULLNAME_LENGHT)
+                             .HasColumnName("by_name");
+            });
+
             builder.Property(p => p.CreationDate)
-                .HasColumnType("date");
+               .HasColumnType("date")
+               .HasColumnName("creation_date");
 
-            builder.Property(p => p.Color)
-                .HasMaxLength(Constants.MAX_COLOR_LENGHT);
+            builder.ComplexProperty(p => p.Info, infoBuilder =>
+            {
+                infoBuilder.Property(i => i.Description)
+                        .IsRequired(false)
+                        .HasDefaultValue("")
+                        .HasMaxLength(PetInfo.DESC_MAX_LENGHT)
+                        .HasColumnName("description");
 
-            builder.Property(p => p.PetHealthInfo)
-                .HasMaxLength(Constants.MAX_DESCRIPTION_LENGHT);
+                infoBuilder.Property(i => i.DateOfBirth)
+                        .HasColumnType("date")
+                        .HasColumnName("date_of_birth");
 
-            builder.Property(p => p.Weight);
-            builder.Property(p => p.Height);
-            builder.Property(p => p.IsNeutered);
-            builder.Property(p => p.IsVaccinated);
+                infoBuilder.Property(i => i.Color)
+                        .IsRequired(false)
+                        .HasMaxLength(PetInfo.MAX_COLOR_LENGHT)
+                        .HasColumnName("color");
 
-            builder.Property(p => p.HelpStatus)
-                   .IsRequired()
-                   .HasDefaultValue(HelpStatus.NeedsHelp)
-                   .HasColumnName("help_status"); 
+                infoBuilder.Property(i => i.PetHealthInfo)
+                        .IsRequired(false)
+                        .HasMaxLength(PetInfo.DESC_MAX_LENGHT)
+                        .HasColumnName("pet_health_info");
 
+                infoBuilder.Property(i => i.Weight)             
+                        .HasColumnName("weight");
+
+                infoBuilder.Property(i => i.Height)                    
+                        .HasColumnName("height");
+
+                infoBuilder.Property(i => i.IsNeutered)                        
+                        .HasColumnName("is_neutered");
+
+                infoBuilder.Property(i => i.IsVaccinated)                        
+                        .HasColumnName("is_vaccinated");
+
+                infoBuilder.Property(i => i.HelpStatus)
+                        .HasDefaultValue(HelpStatus.NeedsHelp)
+                        .HasColumnName("help_status");
+
+                infoBuilder.Property(p => p.OwnerPhoneNumber)
+                        .IsRequired(false)
+                        .HasMaxLength(PetInfo.PHONE_MAX_LENGHT)
+                        .HasColumnName("owner_phone_number");
+            });
 
             builder.OwnsOne(p => p.Address, pa =>
             {
-                pa.ToJson("address");  
+                pa.ToJson("address");
             });
 
             builder.OwnsOne(p => p.Photos, ph =>
             {
                 ph.ToJson("photos");
-                ph.OwnsMany(ph => ph.ListPhotos, lPh => 
+                ph.OwnsMany(ph => ph.ListPhotos, lPh =>
                 {
                     lPh.Property(l => l.Path)
                         .IsRequired()
@@ -73,13 +103,10 @@ namespace PetFamily.Infrastructure.Configurations
                 });
             });
 
-            builder.Property(p => p.OwnerPhoneNumber)
-                .HasMaxLength(Constants.MAX_PHONENUMBER_LENGHT);
-           
             builder.OwnsOne(p => p.RequisitesForHelp, r =>
             {
                 r.ToJson("requisites_for_help");
-                r.OwnsMany(r => r.RequisitesForHelp, rh => 
+                r.OwnsMany(r => r.RequisitesForHelp, rh =>
                 {
                     rh.Property(rh => rh.Name);
                     rh.Property(rh => rh.Description);

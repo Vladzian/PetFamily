@@ -22,17 +22,21 @@ namespace PetFamily.Domain.Volunteer
         public byte Experience { get; }
 
         public static Result<VolunteerInfo, Error> Create(string email, string generalDescription, string phoneNumber, byte experience = 0)
-        {
+        {            
+            if (string.IsNullOrWhiteSpace(email) )
+                return Errors.General.ValueIsRequired(nameof(Email));
+            
             Regex emailRegex = new Regex(@"^.+@.+\..+");// полез искать регулярку и попал на эту статью https://habr.com/ru/articles/175375/
-            if (string.IsNullOrWhiteSpace(email) || !emailRegex.IsMatch(email))
-            {
-                return Errors.General.ValueIsInvalid(nameof(Email));
-            }
+            if (!emailRegex.IsMatch(email))
+                return Errors.General.ValueIsIncorrect(nameof(Email));
+
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+                return Errors.General.ValueIsRequired(nameof(PhoneNumber));
+
             Regex regex = new Regex(@"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$");
             if (!regex.IsMatch(phoneNumber))
-            {
-                return Errors.General.ValueIsInvalid(nameof(PhoneNumber));
-            }
+                return Errors.General.ValueIsIncorrect(nameof(PhoneNumber));
+            
 
             return new VolunteerInfo(email, generalDescription, phoneNumber, experience);
         }

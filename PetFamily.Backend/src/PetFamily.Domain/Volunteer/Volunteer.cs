@@ -34,7 +34,7 @@ namespace PetFamily.Domain.Volunteer
         }
         public ushort CountPetsByStatus(HelpStatus status) 
         {            
-            return (ushort)_Pets.Count(p => p.HelpStatus == status); 
+            return (ushort)_Pets.Count(p => p.Info.HelpStatus == status); 
         }
         public ushort CountPetsFoundAHome() 
         {
