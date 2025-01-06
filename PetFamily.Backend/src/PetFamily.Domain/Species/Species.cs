@@ -38,7 +38,7 @@ namespace PetFamily.Domain.Species
                 return Result.Failure<IReadOnlyList<Breed>>($"В виде животного [{Name}] порода [{breed.Name}] уже присуствует.");
 
             _Breeds.Add(breed);
-            return Result.Success<IReadOnlyList<Breed>>(Breeds);
+            return Result.Success(Breeds);
         }
     }
 }

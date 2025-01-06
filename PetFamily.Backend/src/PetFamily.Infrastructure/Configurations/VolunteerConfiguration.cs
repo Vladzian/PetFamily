@@ -22,24 +22,36 @@ namespace PetFamily.Infrastructure.Configurations
                     id => id.Value,
                     value => VolunteerId.Create(value));
 
-            builder.Property(v => v.FullName)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_FULLNAME_LENGHT);
-            
-            builder.Property(v => v.Email)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_EMAIL_LENGHT);
-            
-            builder.Property(v => v.GeneralDescription)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_DESCRIPTION_LENGHT);
-            
-            builder.Property(v => v.PhoneNumber)
-                .HasColumnType("character")
-                .HasMaxLength(Constants.MAX_PHONENUMBER_LENGHT);
+            builder.ComplexProperty(v => v.FullName, fullNameBuilder =>
+            {
+                fullNameBuilder.Property(fn => fn.Value)
+                                .IsRequired()
+                                .HasMaxLength(Constants.MAX_FULLNAME_LENGHT)
+                                .HasColumnName("full_name");
+            });
+                
 
-            builder.Property(v => v.Experience)
-                .HasColumnType("smallint");
+            builder.ComplexProperty(v => v.Info, infoBuilder =>
+            {
+                infoBuilder.Property(e => e.Email)
+                            .IsRequired()
+                            .HasMaxLength(VolunteerInfo.EMAIL_MAX_LENGHT)
+                            .HasColumnName("email");
+
+                infoBuilder.Property(e => e.GeneralDescription)
+                            .IsRequired()
+                            .HasMaxLength(VolunteerInfo.DESC_MAX_LENGHT)
+                            .HasColumnName("general_description");
+
+                infoBuilder.Property(e => e.PhoneNumber)
+                            .IsRequired()
+                            .HasMaxLength(VolunteerInfo.PHONE_MAX_LENGHT)
+                            .HasColumnName("phone_number");
+
+                infoBuilder.Property(e => e.Experience)
+                            .IsRequired()
+                            .HasColumnName("experience");
+            });
 
             builder.HasMany(v => v.Pets)
                 .WithOne()
@@ -47,15 +59,15 @@ namespace PetFamily.Infrastructure.Configurations
 
             builder.OwnsOne(v => v.SocialMedias, vsm =>
             {
-                vsm.ToJson("social_medias");
+                vsm.ToJson("social_medias");                
                 vsm.OwnsMany(vsm => vsm.ListSocialMedia, lsm => 
                 {
                     lsm.Property(sm => sm.Name)
-                        .IsRequired()
+                        .IsRequired(false)
                         .HasMaxLength(SocialMedia.MAX_NAME_LENGHT);
 
                     lsm.Property(sm => sm.Link)
-                        .IsRequired();
+                        .IsRequired(false);
                 });
             });
 
@@ -64,8 +76,8 @@ namespace PetFamily.Infrastructure.Configurations
                 r.ToJson("requisites_for_help");
                 r.OwnsMany(r => r.RequisitesForHelp, rh =>
                 {
-                    rh.Property(rh => rh.Name);
-                    rh.Property(rh => rh.Description);
+                    rh.Property(rh => rh.Name).IsRequired(false);
+                    rh.Property(rh => rh.Description).IsRequired(false);
                 });
             });
         }

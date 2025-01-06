@@ -35,5 +35,7 @@ namespace PetFamily.Domain.Volunteer
             return Result.Success(RequisitesForHelp);
         }
 
+        public static Requisites Create() => new();
+
     }
 }

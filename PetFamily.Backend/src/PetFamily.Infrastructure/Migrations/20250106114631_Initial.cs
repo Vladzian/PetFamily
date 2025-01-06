@@ -30,9 +30,9 @@ namespace PetFamily.Infrastructure.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     full_name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     email = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
-                    general_description = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
-                    phone_number = table.Column<string>(type: "character(20)", maxLength: 20, nullable: false),
                     experience = table.Column<byte>(type: "smallint", nullable: false),
+                    general_description = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
+                    phone_number = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
                     requisites_for_help = table.Column<string>(type: "jsonb", nullable: false),
                     social_medias = table.Column<string>(type: "jsonb", nullable: false)
                 },
