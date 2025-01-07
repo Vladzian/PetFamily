@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.Mvc;
+using PetFamily.API.Response;
 using PetFamily.Domain.Shared;
 
 namespace PetFamily.API.Extensions
@@ -13,11 +15,14 @@ namespace PetFamily.API.Extensions
                 ErrorType.NotFound => StatusCodes.Status404NotFound,
                 ErrorType.Failure => StatusCodes.Status500InternalServerError,
                 ErrorType.Conflict => StatusCodes.Status409Conflict,
-                _ => StatusCodes.Status500InternalServerError                
+                _ => StatusCodes.Status500InternalServerError
             };
-            return new ObjectResult(error) 
+
+            var envelope = Envelope.Error(error);
+
+            return new ObjectResult(envelope)
             {
-                StatusCode = statusCode                
+                StatusCode = statusCode
             };
         }
     }

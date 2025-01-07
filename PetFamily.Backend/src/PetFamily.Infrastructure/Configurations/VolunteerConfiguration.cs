@@ -1,4 +1,4 @@
-﻿using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions; 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Domain.Shared;
@@ -57,27 +57,32 @@ namespace PetFamily.Infrastructure.Configurations
                 .WithOne()
                 .HasForeignKey("volunteer_id");
 
-            builder.OwnsOne(v => v.SocialMedias, vsm =>
+
+            builder.OwnsOne(v => v.ListSocialMedia, vsm =>
             {
-                vsm.ToJson("social_medias");                
-                vsm.OwnsMany(vsm => vsm.ListSocialMedia, lsm => 
+                vsm.ToJson("social_medias");
+                vsm.OwnsMany(vsm => vsm.SocialMedias, lsm =>
                 {
                     lsm.Property(sm => sm.Name)
-                        .IsRequired(false)
+                        .IsRequired()
                         .HasMaxLength(SocialMedia.MAX_NAME_LENGHT);
 
                     lsm.Property(sm => sm.Link)
-                        .IsRequired(false);
+                        .IsRequired();
                 });
             });
 
-            builder.OwnsOne(p => p.RequisitesForHelp, r =>
+            builder.OwnsOne(p => p.ListHelpRequisite, r =>
             {
                 r.ToJson("requisites_for_help");
-                r.OwnsMany(r => r.RequisitesForHelp, rh =>
+                r.OwnsMany(r => r.HelpRequisites, rh =>
                 {
-                    rh.Property(rh => rh.Name).IsRequired(false);
-                    rh.Property(rh => rh.Description).IsRequired(false);
+                    rh.Property(rh => rh.Name)
+                        .IsRequired()
+                        .HasMaxLength(HelpRequisite.MAX_NAME_LENGHT);
+                    rh.Property(rh => rh.Description)
+                        .IsRequired()
+                        .HasMaxLength(HelpRequisite.MAX_DESC_LENGHT);
                 });
             });
         }

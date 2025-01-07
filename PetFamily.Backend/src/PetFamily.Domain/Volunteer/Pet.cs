@@ -31,7 +31,7 @@ namespace PetFamily.Domain.Volunteer
         public Address Address { get; private set; }
         public string PetAddressByString => Address.AddressByString(Address);
         public PetPhotos Photos {  get; }
-        public Requisites RequisitesForHelp { get; }
+        public HelpRequisiteList? HelpRequisiteList { get; private set; }
 
         public static Result<Pet, Error> Create(PetId petId, PetByName byName, 
                                          PetInfo info, PetSpecie? specie,  
@@ -46,10 +46,14 @@ namespace PetFamily.Domain.Volunteer
             return new Pet(petId, byName, info, speciePet, petAddress);
         }
 
-        public Result<IReadOnlyList<HelpRequisite>,Error> AddRequisiteForHelp(HelpRequisite _requisiteForHelp)
+        /*public Result<IReadOnlyList<HelpRequisite>,Error> AddRequisiteForHelp(HelpRequisite helpRequisite)
         {
-            return RequisitesForHelp.AddHelpRequisite(_requisiteForHelp);
-        }
+            if (_requisitesForHelp.Contains(helpRequisite))
+                return Errors.General.ValueAlreadyExist(helpRequisite, nameof(RequisitesForHelp));
+
+            _requisitesForHelp.Add(helpRequisite);
+            return _requisitesForHelp;
+        }*/
         public Result<IReadOnlyList<PetPhoto>, Error> AddPetPhoto(PetPhoto petPhoto)
         {
             return Photos.AddPetPhoto(petPhoto);

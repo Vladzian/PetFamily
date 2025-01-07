@@ -103,13 +103,17 @@ namespace PetFamily.Infrastructure.Configurations
                 });
             });
 
-            builder.OwnsOne(p => p.RequisitesForHelp, r =>
+            builder.OwnsOne(p => p.HelpRequisiteList, r =>
             {
                 r.ToJson("requisites_for_help");
-                r.OwnsMany(r => r.RequisitesForHelp, rh =>
+                r.OwnsMany(r => r.HelpRequisites, rh =>
                 {
-                    rh.Property(rh => rh.Name);
-                    rh.Property(rh => rh.Description);
+                    rh.Property(rh => rh.Name)
+                        .IsRequired()
+                        .HasMaxLength(HelpRequisite.MAX_NAME_LENGHT); ;
+                    rh.Property(rh => rh.Description)
+                        .IsRequired()
+                        .HasMaxLength(HelpRequisite.MAX_DESC_LENGHT);
                 });
             });
 

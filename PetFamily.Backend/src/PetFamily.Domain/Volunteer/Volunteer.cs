@@ -5,8 +5,8 @@ using System.Text.RegularExpressions;
 
 namespace PetFamily.Domain.Volunteer
 {
-    public sealed class Volunteer : Shared.Entity<VolunteerId>
-    {
+    public class Volunteer : Shared.Entity<VolunteerId>
+    {   
         //for ef core
         private Volunteer(VolunteerId id) : base(id)
         {            
@@ -15,16 +15,16 @@ namespace PetFamily.Domain.Volunteer
         {      
             FullName = fullName;
             Info = volunteerInfo;
-            RequisitesForHelp = Requisites.Create();
-            SocialMedias = SocialMedias.Create();
+            ListSocialMedia = SocialMediaList.Create();
+            ListHelpRequisite = HelpRequisiteList.Create();
         }
         public VolunteerFullName FullName { get; private set; }
 
         public VolunteerInfo Info { get; private set; }
 
-        public SocialMedias SocialMedias {  get;  }
+        public SocialMediaList? ListSocialMedia { get; private set; }
 
-        public Requisites RequisitesForHelp { get; }
+        public HelpRequisiteList? ListHelpRequisite { get; private set; }
 
         private readonly List<Pet> _Pets = [];
         public IReadOnlyList<Pet> Pets => _Pets;
@@ -58,15 +58,24 @@ namespace PetFamily.Domain.Volunteer
             _Pets.Add(pet);
             return Result.Success(Pets);
         }
-        public Result<IReadOnlyList<HelpRequisite>, Error> AddRequisiteForHelp(HelpRequisite _requisiteForHelp)
-        {
-            return RequisitesForHelp.AddHelpRequisite(_requisiteForHelp);
-        }
+        //public Result<IReadOnlyList<HelpRequisite>, Error> AddRequisiteForHelp(HelpRequisite helpRequisite)
+        //{
+        //    if (_requisitesForHelp.Contains(helpRequisite))
+        //        return Errors.General.ValueAlreadyExist(helpRequisite, nameof(RequisitesForHelp));
 
-        public Result<IReadOnlyList<SocialMedia> , Error> AddSocialMedia(SocialMedia socialMedia)
-        {
-            return SocialMedias.AddSocialMedia(socialMedia);
-        }
+        //    _requisitesForHelp.Add(helpRequisite);
+        //    return _requisitesForHelp;
+        //}
+
+        //public Result<IReadOnlyList<SocialMedia> , Error> AddSocialMedia(SocialMedia socialMedia)
+        //{
+
+        //    if (_socialMedias.Contains(socialMedia))
+        //        return Errors.General.ValueAlreadyExist(socialMedia, nameof(SocialMediaList));
+
+        //    _socialMedias.Add(socialMedia);
+        //    return _socialMedias;
+        //}
 
         public static Volunteer Create(VolunteerId volunteerId, VolunteerFullName fullName, VolunteerInfo volunteerInfo)
         {
