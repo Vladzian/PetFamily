@@ -22,13 +22,16 @@ namespace PetFamily.Domain.Species
         public SpeciesId SpeciesId { get; }
         public Species Species { get;  }
 
-        public static Result<Breed> Create(BreedId breedId, string name) 
+        public static Result<Breed, Error> Create(BreedId breedId, string name) 
         {
             if (string.IsNullOrWhiteSpace(name))
-                return Result.Failure<Breed>("Не задано название породы.");
+                return Errors.General.ValueIsRequired(nameof(Name));
 
             Breed breed = new Breed(breedId, name);
-            return Result.Success<Breed>(breed);
+            return breed;
         }
+
+        public static implicit operator string(Breed breed)  => breed.Name;
+        
     }
 }

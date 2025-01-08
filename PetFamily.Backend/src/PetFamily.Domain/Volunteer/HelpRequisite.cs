@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,8 @@ namespace PetFamily.Domain.Volunteer
         }
         public string Name { get; }
         public string Description { get; }
+
+        public static implicit operator string(HelpRequisite helpRequisite) => helpRequisite.Name;
     }
 
     public record Requisites
@@ -26,13 +29,13 @@ namespace PetFamily.Domain.Volunteer
         private readonly List<HelpRequisite> _RequisitesForHelp = [];
         public IReadOnlyList<HelpRequisite> RequisitesForHelp => _RequisitesForHelp;
 
-        public Result<IReadOnlyList<HelpRequisite>> AddHelpRequisite(HelpRequisite helpRequisite)
+        public Result<IReadOnlyList<HelpRequisite>, Error> AddHelpRequisite(HelpRequisite helpRequisite)
         {
             if (_RequisitesForHelp.Contains(helpRequisite))
-                return Result.Failure<IReadOnlyList<HelpRequisite>>("Данный реквизит уже существует в списке.");
+                return Errors.General.ValueAlreadyExist(helpRequisite, nameof(RequisitesForHelp));
 
             _RequisitesForHelp.Add(helpRequisite);
-            return Result.Success(RequisitesForHelp);
+            return _RequisitesForHelp;
         }
 
         public static Requisites Create() => new();

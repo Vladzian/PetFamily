@@ -22,12 +22,12 @@ namespace PetFamily.Infrastructure.Repositories
             return volunteer.Id;
         }
 
-        public async Task<Result<Volunteer, Error>> GetById(VolunteerId id)
+        public async Task<Result<Volunteer, Error>> GetById(VolunteerId id, CancellationToken cancellationToken = default)
         {
             var volunteer = await _dbContext.Volunteers
                                             .Include(v => v.Pets)
                                             .ThenInclude(p => p.Photos)
-                                            .FirstOrDefaultAsync(v => v.Id == id);
+                                            .FirstOrDefaultAsync(v => v.Id == id, cancellationToken);
 
             if (volunteer is null)
                 return Errors.General.NotFound(id);
