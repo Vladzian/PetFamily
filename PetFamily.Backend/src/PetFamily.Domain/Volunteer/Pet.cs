@@ -30,20 +30,14 @@ namespace PetFamily.Domain.Volunteer
         public PetInfo Info { get; private set; }
         public Address Address { get; private set; }
         public string PetAddressByString => Address.AddressByString(Address);
-        public PetPhotos Photos {  get; }
+        public PetPhotos Photos {  get; private set; }
         public HelpRequisiteList? HelpRequisiteList { get; private set; }
 
         public static Result<Pet, Error> Create(PetId petId, PetByName byName, 
-                                         PetInfo info, PetSpecie? specie,  
+                                         PetInfo info, PetSpecie specie,  
                                          Address petAddress)
         {
-            PetSpecie speciePet;
-            if (specie is null)
-                speciePet = PetSpecie.Empty();
-            else
-                speciePet = specie;
-
-            return new Pet(petId, byName, info, speciePet, petAddress);
+            return new Pet(petId, byName, info, specie, petAddress);
         }
 
         /*public Result<IReadOnlyList<HelpRequisite>,Error> AddRequisiteForHelp(HelpRequisite helpRequisite)
