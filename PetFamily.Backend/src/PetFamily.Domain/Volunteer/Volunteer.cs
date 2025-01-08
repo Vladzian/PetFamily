@@ -58,24 +58,18 @@ namespace PetFamily.Domain.Volunteer
             _Pets.Add(pet);
             return Result.Success(Pets);
         }
-        //public Result<IReadOnlyList<HelpRequisite>, Error> AddRequisiteForHelp(HelpRequisite helpRequisite)
-        //{
-        //    if (_requisitesForHelp.Contains(helpRequisite))
-        //        return Errors.General.ValueAlreadyExist(helpRequisite, nameof(RequisitesForHelp));
 
-        //    _requisitesForHelp.Add(helpRequisite);
-        //    return _requisitesForHelp;
-        //}
+        public Result<HelpRequisiteList, Error> SetRequisiteForHelp(HelpRequisiteList helpRequisiteList)
+        {
+            ListHelpRequisite = helpRequisiteList;
+            return ListHelpRequisite;
+        }
 
-        //public Result<IReadOnlyList<SocialMedia> , Error> AddSocialMedia(SocialMedia socialMedia)
-        //{
-
-        //    if (_socialMedias.Contains(socialMedia))
-        //        return Errors.General.ValueAlreadyExist(socialMedia, nameof(SocialMediaList));
-
-        //    _socialMedias.Add(socialMedia);
-        //    return _socialMedias;
-        //}
+        public Result<SocialMediaList , Error> SetSocialMedia(SocialMediaList socialMediaList)
+        {
+            ListSocialMedia = socialMediaList;
+            return ListSocialMedia;
+        }
 
         public static Volunteer Create(VolunteerId volunteerId, VolunteerFullName fullName, VolunteerInfo volunteerInfo)
         {

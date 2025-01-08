@@ -15,7 +15,7 @@ namespace PetFamily.Domain.Volunteer
         }
         public string Name { get; }
         public string Description { get; }
-        public Result<HelpRequisite, Error> Create(string name, string desc)
+        public static Result<HelpRequisite, Error> Create(string name, string desc)
         {
             if (string.IsNullOrWhiteSpace(name))
                 Errors.General.ValueIsInvalid(nameof(Name));

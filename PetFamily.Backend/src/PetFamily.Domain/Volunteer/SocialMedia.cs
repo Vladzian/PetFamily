@@ -18,7 +18,7 @@ namespace PetFamily.Domain.Volunteer
         public string Name { get; }
         public string Link { get; }
 
-        public Result<SocialMedia, Error> Create(string name, string link)
+        public static Result<SocialMedia, Error> Create(string name, string link)
         {
             if (string.IsNullOrWhiteSpace(name))
                 Errors.General.ValueIsInvalid(nameof(Name));

@@ -33,26 +33,36 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
             //создаем доменную сущность
             var newVolunteer = Volunteer.Create(volunteerId, volunteerFullName.Value, volunteerInfo.Value);
 
-            /*if(request.socialMedias.Count > 0)
+            if(request.socialMedias.Count > 0)
             {
+                List<SocialMedia> tmpSocMedias= [];
+
                 foreach (var socialMedia in request.socialMedias)
                 {
-                    SocialMedia.
-                    var result = newVolunteer.AddSocialMedia(new SocialMedia(socialMedia.name, socialMedia.link));
-                    if (result.IsFailure)
+                    var result = SocialMedia.Create(socialMedia.name, socialMedia.link);
+                    if(result.IsFailure)
                         return result.Error;
-                }               
+
+                    tmpSocMedias.Add(result.Value);
+                }
+                SocialMediaList listSocMedias = new SocialMediaList(tmpSocMedias);
+                newVolunteer.SetSocialMedia(listSocMedias);
             }
 
             if (request.helpRequisites.Count > 0)
             {
+                List<HelpRequisite> tmpHelpRequisites = [];
                 foreach ( var helpRequisite in request.helpRequisites)
                 {
-                    var result = newVolunteer.AddRequisiteForHelp(new HelpRequisite(helpRequisite.name, helpRequisite.desc));
+                    var result = HelpRequisite.Create(helpRequisite.name, helpRequisite.desc);
                     if (result.IsFailure)
                         return result.Error;
+
+                    tmpHelpRequisites.Add(result.Value);
                 }
-            }*/
+                HelpRequisiteList listHelpRequisite = new HelpRequisiteList(tmpHelpRequisites);
+                newVolunteer.SetRequisiteForHelp(listHelpRequisite);
+            }
 
             //вызываем сохранение в БД при помощи репозитория
             var guidVolunteer = await _volunteersRepository.Add(newVolunteer, cancellationToken);
