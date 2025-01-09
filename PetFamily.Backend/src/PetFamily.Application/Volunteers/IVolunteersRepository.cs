@@ -8,5 +8,7 @@ namespace PetFamily.Application.Repositories
     {
         Task<Guid> Add(Volunteer volunteer, CancellationToken cancellationToken = default);
         Task<Result<Volunteer, Error>> GetById(VolunteerId id, CancellationToken cancellationToken = default);
+        Task<Result<IEnumerable<Volunteer>>> GetAll (CancellationToken cancellationToken = default);
+        Task<Result<Volunteer, Error>> GetByPhoneNumber(string phoneNumber, CancellationToken cancellationToken = default);
     }
 }

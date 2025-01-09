@@ -33,8 +33,8 @@ namespace PetFamily.Infrastructure.Migrations
                     experience = table.Column<byte>(type: "smallint", nullable: false),
                     general_description = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
                     phone_number = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
-                    requisites_for_help = table.Column<string>(type: "jsonb", nullable: false),
-                    social_medias = table.Column<string>(type: "jsonb", nullable: false)
+                    requisites_for_help = table.Column<string>(type: "jsonb", nullable: true),
+                    social_medias = table.Column<string>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -82,7 +82,7 @@ namespace PetFamily.Infrastructure.Migrations
                     specie_id = table.Column<Guid>(type: "uuid", nullable: true),
                     address = table.Column<string>(type: "jsonb", nullable: false),
                     photos = table.Column<string>(type: "jsonb", nullable: false),
-                    requisites_for_help = table.Column<string>(type: "jsonb", nullable: false)
+                    requisites_for_help = table.Column<string>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {

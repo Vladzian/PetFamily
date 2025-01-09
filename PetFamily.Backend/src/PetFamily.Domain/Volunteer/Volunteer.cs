@@ -1,11 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace PetFamily.Domain.Volunteer
 {
-    public sealed class Volunteer : Shared.Entity<VolunteerId>
-    {
+    public class Volunteer : Shared.Entity<VolunteerId>
+    {   
         //for ef core
         private Volunteer(VolunteerId id) : base(id)
         {            
@@ -14,16 +15,16 @@ namespace PetFamily.Domain.Volunteer
         {      
             FullName = fullName;
             Info = volunteerInfo;
-            RequisitesForHelp = Requisites.Create();
-            SocialMedias = SocialMedias.Create();
+            ListSocialMedia = SocialMediaList.Create();
+            ListHelpRequisite = HelpRequisiteList.Create();
         }
         public VolunteerFullName FullName { get; private set; }
 
         public VolunteerInfo Info { get; private set; }
 
-        public SocialMedias SocialMedias {  get;  }
+        public SocialMediaList? ListSocialMedia { get; private set; }
 
-        public Requisites RequisitesForHelp { get; }
+        public HelpRequisiteList? ListHelpRequisite { get; private set; }
 
         private readonly List<Pet> _Pets = [];
         public IReadOnlyList<Pet> Pets => _Pets;
@@ -57,14 +58,17 @@ namespace PetFamily.Domain.Volunteer
             _Pets.Add(pet);
             return Result.Success(Pets);
         }
-        public Result<IReadOnlyList<HelpRequisite>> AddRequisiteForHelp(HelpRequisite _requisiteForHelp)
+
+        public Result<HelpRequisiteList, Error> SetRequisiteForHelp(HelpRequisiteList helpRequisiteList)
         {
-            return RequisitesForHelp.AddHelpRequisite(_requisiteForHelp);
+            ListHelpRequisite = helpRequisiteList;
+            return ListHelpRequisite;
         }
 
-        public Result<IReadOnlyList<SocialMedia>> AddSocialMedia(SocialMedia socialMedia)
+        public Result<SocialMediaList , Error> SetSocialMedia(SocialMediaList socialMediaList)
         {
-            return SocialMedias.AddSocialMedia(socialMedia);
+            ListSocialMedia = socialMediaList;
+            return ListSocialMedia;
         }
 
         public static Volunteer Create(VolunteerId volunteerId, VolunteerFullName fullName, VolunteerInfo volunteerInfo)

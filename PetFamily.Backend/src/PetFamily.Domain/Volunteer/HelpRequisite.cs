@@ -1,16 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Volunteer
 {
     public record HelpRequisite
     {
-        protected HelpRequisite(){}
+        public const int MAX_NAME_LENGHT = 150;
+        public const int MAX_DESC_LENGHT = 512;
+        public HelpRequisite() { }
         public HelpRequisite(string name, string desc)
         {
             Name = name;
@@ -18,27 +15,30 @@ namespace PetFamily.Domain.Volunteer
         }
         public string Name { get; }
         public string Description { get; }
+        public static Result<HelpRequisite, Error> Create(string name, string desc)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                Errors.General.ValueIsInvalid(nameof(Name));
 
+            if (string.IsNullOrWhiteSpace(desc))
+                Errors.General.ValueIsInvalid(nameof(Description));
+
+            return new HelpRequisite(name, desc);
+        }
         public static implicit operator string(HelpRequisite helpRequisite) => helpRequisite.Name;
     }
 
-    public record Requisites
+    public record HelpRequisiteList
     {
-        protected Requisites() { }
-
-        private readonly List<HelpRequisite> _RequisitesForHelp = [];
-        public IReadOnlyList<HelpRequisite> RequisitesForHelp => _RequisitesForHelp;
-
-        public Result<IReadOnlyList<HelpRequisite>, Error> AddHelpRequisite(HelpRequisite helpRequisite)
+        private HelpRequisiteList()
         {
-            if (_RequisitesForHelp.Contains(helpRequisite))
-                return Errors.General.ValueAlreadyExist(helpRequisite, nameof(RequisitesForHelp));
-
-            _RequisitesForHelp.Add(helpRequisite);
-            return _RequisitesForHelp;
         }
+        public HelpRequisiteList(IEnumerable<HelpRequisite> helpRequisites)
+        {
+            HelpRequisites = helpRequisites.ToList();
+        }
+        public IReadOnlyList<HelpRequisite> HelpRequisites { get; } = [];
 
-        public static Requisites Create() => new();
-
+        public static HelpRequisiteList Create() => new HelpRequisiteList([]);
     }
 }

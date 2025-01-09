@@ -6,7 +6,10 @@ namespace PetFamily.Domain.Volunteer
     public record SocialMedia
     {
         public const int MAX_NAME_LENGHT = 150;
-        
+
+        public SocialMedia()
+        {            
+        }
         public SocialMedia(string name, string link)
         {
             Name = name;
@@ -15,24 +18,31 @@ namespace PetFamily.Domain.Volunteer
         public string Name { get; }
         public string Link { get; }
 
+        public static Result<SocialMedia, Error> Create(string name, string link)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                Errors.General.ValueIsInvalid(nameof(Name));
+
+            if (string.IsNullOrWhiteSpace(link))           
+                Errors.General.ValueIsInvalid(nameof(Link));            
+
+            return new SocialMedia(name, link);
+        }
+
         public static implicit operator string(SocialMedia socilaMedia) => socilaMedia.Name;
     }
 
-    public record SocialMedias
+    public record SocialMediaList
     {
-        private readonly List<SocialMedia> _SocialMedias = [];
-        public IReadOnlyList<SocialMedia> ListSocialMedia => _SocialMedias;
-
-        public Result<IReadOnlyList<SocialMedia>, Error> AddSocialMedia(SocialMedia socialMedia)
-        {
-            if (_SocialMedias.Contains(socialMedia))
-                return Errors.General.ValueAlreadyExist(socialMedia, nameof(ListSocialMedia));
-
-            _SocialMedias.Add(socialMedia);
-            return _SocialMedias;
+        private SocialMediaList()
+        {            
         }
+        public SocialMediaList(IEnumerable<SocialMedia> socialMedias)
+        {
+            SocialMedias = socialMedias.ToList();
+        }
+        public IReadOnlyList<SocialMedia> SocialMedias { get; } = [];
 
-        public static SocialMedias Create() => new();
-        
+        public static SocialMediaList Create() => new SocialMediaList([]);
     }
 }

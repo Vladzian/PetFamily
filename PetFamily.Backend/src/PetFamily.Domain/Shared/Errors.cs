@@ -32,7 +32,20 @@
             {
                 string labelName = name ?? "Value";
                 string labelCollection = collectionName ?? "collection";
-                return Error.Conflict("value.is.already.exist", $"The {labelName} is already exist in {labelCollection}");
+                return Error.Conflict("value.already.exist", $"The {labelName} is already exist in {labelCollection}");
+            }
+        }
+
+        public class Volunteers
+        {
+            public static Error NotFoundByPhoneNumber(string? phoneNumber = null)
+            {
+                string info = phoneNumber == null ? "" : $"'{phoneNumber}'";
+                return Error.NotFound("volunteer.not.found", $"Record not found by phone number {info}");
+            }
+            public static Error AlreadyExist()
+            {
+                return Error.Conflict("volunteer.already.exist", $"Volunteer already exist");
             }
         }
     }

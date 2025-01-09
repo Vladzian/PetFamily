@@ -6,28 +6,17 @@ namespace PetFamily.Domain.Volunteer
 {
     public record PetSpecie
     {
-        private PetSpecie(Guid? specieId, Guid? breedId)
+        private PetSpecie(Guid specieId, Guid breedId)
         {
             SpecieId = specieId;
             BreedId = breedId;
         }
-        public Guid? SpecieId { get; }
-        public Guid? BreedId { get; }
+        public Guid SpecieId { get; }
+        public Guid BreedId { get; }
 
-        public static Result<PetSpecie, Error> Create(SpeciesId? specieId, BreedId? breedId)
+        public static Result<PetSpecie, Error> Create(SpeciesId specieId, BreedId breedId)
         {
-            Guid? idSpecie = null;
-            Guid? idBreed = null;
-
-            if (specieId != null)
-                idSpecie = specieId.Value;
-
-            if (breedId != null)
-                idBreed = breedId.Value;
-
-            return new PetSpecie(idSpecie, idBreed);
+           return new PetSpecie(specieId, breedId);
         }
-        public static PetSpecie Empty() => new(null, null);
-
     }
 }
