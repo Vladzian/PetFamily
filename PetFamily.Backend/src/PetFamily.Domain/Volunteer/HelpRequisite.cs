@@ -30,15 +30,15 @@ namespace PetFamily.Domain.Volunteer
 
     public record HelpRequisiteList
     {
-        private HelpRequisiteList()
+        public HelpRequisiteList()
         {
         }
         public HelpRequisiteList(IEnumerable<HelpRequisite> helpRequisites)
         {
             HelpRequisites = helpRequisites.ToList();
         }
-        public IReadOnlyList<HelpRequisite> HelpRequisites { get; } = [];
+        public IReadOnlyList<HelpRequisite> HelpRequisites { get; }
 
-        public static HelpRequisiteList Create() => new HelpRequisiteList([]);
+        public static HelpRequisiteList Create() => new HelpRequisiteList(new List<HelpRequisite>() );
     }
 }

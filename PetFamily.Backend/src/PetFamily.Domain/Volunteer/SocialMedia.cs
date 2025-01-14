@@ -34,15 +34,15 @@ namespace PetFamily.Domain.Volunteer
 
     public record SocialMediaList
     {
-        private SocialMediaList()
+        public SocialMediaList()
         {            
         }
         public SocialMediaList(IEnumerable<SocialMedia> socialMedias)
         {
             SocialMedias = socialMedias.ToList();
         }
-        public IReadOnlyList<SocialMedia> SocialMedias { get; } = [];
+        public IReadOnlyList<SocialMedia> SocialMedias { get; } = new List<SocialMedia>();
 
-        public static SocialMediaList Create() => new SocialMediaList([]);
+        public static SocialMediaList Create() => new SocialMediaList(new List<SocialMedia>());
     }
 }

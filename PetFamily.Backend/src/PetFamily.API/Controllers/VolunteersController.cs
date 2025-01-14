@@ -5,10 +5,8 @@ using PetFamily.Application.Volunteers.CreateVolunteer;
 using PetFamily.Application.Volunteers.GetVolunteer;
 
 namespace PetFamily.API.Controllers
-{
-    [ApiController]
-    [Route("[controller]")]
-    public class VolunteersController : ControllerBase
+{    
+    public class VolunteersController : ApplicationController
     {
 
         [HttpGet]
@@ -17,7 +15,7 @@ namespace PetFamily.API.Controllers
         {
             var result = await createVolunteerHandler.GetAllAsync(cancellationToken);            
 
-            return Ok(Envelope.Ok(result.Value));
+            return Ok(result.Value);
         }
 
         [HttpGet("{id:guid}")]
@@ -29,7 +27,7 @@ namespace PetFamily.API.Controllers
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return Ok(Envelope.Ok(result.Value));
+            return Ok(result.Value);
         }
 
         [HttpPost]
@@ -41,7 +39,7 @@ namespace PetFamily.API.Controllers
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return Ok(Envelope.Ok(result.Value));
+            return Ok(result.Value);
         }    
 
     }
