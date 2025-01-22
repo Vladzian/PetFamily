@@ -16,7 +16,7 @@ namespace PetFamily.Domain.Volunteer
         {
             if (string.IsNullOrWhiteSpace(fullName))
             {
-                Errors.General.ValueIsInvalid("FulllName");
+                return Errors.General.ValueIsInvalid("FulllName");
             }
 
             return new VolunteerFullName(fullName);

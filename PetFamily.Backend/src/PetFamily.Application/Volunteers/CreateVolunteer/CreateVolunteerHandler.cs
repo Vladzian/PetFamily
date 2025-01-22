@@ -8,39 +8,38 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
     public class CreateVolunteerHandler
     {
         private readonly IVolunteersRepository _volunteersRepository;
+
         public CreateVolunteerHandler(IVolunteersRepository volunteersRepository)
         {
             _volunteersRepository = volunteersRepository;
-        }       
-        public async Task<Result<Guid,Error>> HandleAsync(CreateVolunteerCommand request, CancellationToken cancellationToken = default)
+        }
+        public async Task<Result<Guid, Error>> HandleAsync(CreateVolunteerCommand request, CancellationToken cancellationToken = default)
         {
-            //валидируем VO
             var volunteerId = VolunteerId.NewEntityId();
-            var volunteerFullName = VolunteerFullName.Create(request.fullName);
-            if (volunteerFullName.IsFailure)
-                return volunteerFullName.Error;
+            var volunteerFullName = VolunteerFullName.Create(request.FullName).Value;
 
-            var volunteerInfo = VolunteerInfo.Create(request.email,request.generalDescription,request.phoneNumber,request.experience);
-            if (volunteerInfo.IsFailure)
-                return volunteerInfo.Error;
+            var volunteerInfo = VolunteerInfo.Create(request.Email,
+                                                     request.GeneralDescription,
+                                                     request.PhoneNumber,
+                                                     request.Experience).Value;
 
             //проверим наличие волонтера с таким же номером телефона
-            var volunteer = await _volunteersRepository.GetByPhoneNumber(request.phoneNumber, cancellationToken);
+            var volunteer = await _volunteersRepository.GetByPhoneNumber(request.PhoneNumber, cancellationToken);
             if (volunteer.IsSuccess)
                 return Errors.Volunteers.AlreadyExist();
 
 
             //создаем доменную сущность
-            var newVolunteer = Volunteer.Create(volunteerId, volunteerFullName.Value, volunteerInfo.Value);
+            var newVolunteer = Volunteer.Create(volunteerId, volunteerFullName, volunteerInfo);
 
-            if(request.socialMedias.Count > 0)
+            if (request.SocialMedias.Count > 0)
             {
-                List<SocialMedia> tmpSocMedias= [];
+                List<SocialMedia> tmpSocMedias = [];
 
-                foreach (var socialMedia in request.socialMedias)
+                foreach (var socialMedia in request.SocialMedias)
                 {
-                    var result = SocialMedia.Create(socialMedia.name, socialMedia.link);
-                    if(result.IsFailure)
+                    var result = SocialMedia.Create(socialMedia.Name, socialMedia.Link);
+                    if (result.IsFailure)
                         return result.Error;
 
                     tmpSocMedias.Add(result.Value);
@@ -49,12 +48,12 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
                 newVolunteer.SetSocialMedia(listSocMedias);
             }
 
-            if (request.helpRequisites.Count > 0)
+            if (request.HelpRequisites.Count > 0)
             {
                 List<HelpRequisite> tmpHelpRequisites = [];
-                foreach ( var helpRequisite in request.helpRequisites)
+                foreach (var helpRequisite in request.HelpRequisites)
                 {
-                    var result = HelpRequisite.Create(helpRequisite.name, helpRequisite.desc);
+                    var result = HelpRequisite.Create(helpRequisite.Name, helpRequisite.Desc);
                     if (result.IsFailure)
                         return result.Error;
 
