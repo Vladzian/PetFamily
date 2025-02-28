@@ -37,25 +37,18 @@ namespace PetFamily.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create([FromServices] CreateVolunteerHandler createVolunteerHandler,
-                                                [FromServices] IValidator<CreateVolunteerCommand> validator,
+                                                //[FromServices] IValidator<CreateVolunteerCommand> validator,
                                                 [FromBody] CreateVolunteerCommand request,
                                                 CancellationToken cancellationToken = default)
         {
             //валидируем VO
-            var validatorResult = await validator.ValidateAsync(request, cancellationToken);
+            /*var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
-            if (!validatorResult.IsValid)
+            if(validatorResult.IsValid == false)
             {
-                var validationErrors = validatorResult.Errors;
-
-                var errors = from validationError in validationErrors
-                             let error = Error.Validation(validationError.ErrorCode, validationError.ErrorMessage)
-                             select new ResponseError(error.Code, error.Message, validationError.PropertyName);
-
-                var envelope = Envelope.Error(errors);
-                return BadRequest(envelope);
+                return validatorResult.ToValidationErrorResponse();
             }
-
+            */
             var result = await createVolunteerHandler.HandleAsync(request, cancellationToken);
             if (result.IsFailure)
                 return result.Error.ToResponse();

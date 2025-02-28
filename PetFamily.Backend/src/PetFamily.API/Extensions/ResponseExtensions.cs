@@ -1,7 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Response;
 using PetFamily.Domain.Shared;
+
 
 namespace PetFamily.API.Extensions
 {
@@ -26,6 +28,26 @@ namespace PetFamily.API.Extensions
             {
                 StatusCode = statusCode
             };
+        }
+
+        public static ActionResult ToValidationErrorResponse(this ValidationResult result)
+        {
+            if (result.IsValid)
+                throw new InvalidOperationException("Результат проверки не может быть успешным!");
+
+
+            var validationErrors = result.Errors;
+
+            var errors = from validationError in validationErrors
+                         let error = Error.Deserialize(validationError.ErrorMessage)
+                         select new ResponseError(error.Code, error.Message, validationError.PropertyName);
+
+            var envelope = Envelope.Error(errors);
+            return new ObjectResult(envelope)
+            {
+                StatusCode = StatusCodes.Status400BadRequest
+            };
+
         }
     }
 }
