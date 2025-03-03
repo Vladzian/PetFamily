@@ -78,8 +78,8 @@ namespace PetFamily.Infrastructure.Migrations
                     owner_phone_number = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: true),
                     pet_health_info = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
                     weight = table.Column<float>(type: "real", nullable: false),
-                    breed_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    specie_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    breed_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    specie_id = table.Column<Guid>(type: "uuid", nullable: false),
                     address = table.Column<string>(type: "jsonb", nullable: false),
                     photos = table.Column<string>(type: "jsonb", nullable: false),
                     requisites_for_help = table.Column<string>(type: "jsonb", nullable: true)

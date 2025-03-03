@@ -16,6 +16,7 @@ namespace PetFamily.Infrastructure
         {
             optionsBuilder.UseNpgsql(configuration.GetConnectionString(CS_POSTGRES_DB));
             optionsBuilder.UseSnakeCaseNamingConvention();
+            
             optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
         }
 

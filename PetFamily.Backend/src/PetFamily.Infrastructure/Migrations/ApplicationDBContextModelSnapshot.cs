@@ -148,11 +148,11 @@ namespace PetFamily.Infrastructure.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<Guid?>("BreedId")
+                            b1.Property<Guid>("BreedId")
                                 .HasColumnType("uuid")
                                 .HasColumnName("breed_id");
 
-                            b1.Property<Guid?>("SpecieId")
+                            b1.Property<Guid>("SpecieId")
                                 .HasColumnType("uuid")
                                 .HasColumnName("specie_id");
                         });
