@@ -8,7 +8,7 @@ namespace PetFamily.Domain.Volunteer
         public const int MAX_NAME_LENGHT = 150;
 
         public SocialMedia()
-        {            
+        {
         }
         public SocialMedia(string name, string link)
         {
@@ -18,13 +18,17 @@ namespace PetFamily.Domain.Volunteer
         public string Name { get; }
         public string Link { get; }
 
-        public static Result<SocialMedia, Error> Create(string name, string link)
+        public static Result<SocialMedia, IEnumerable<Error>> Create(string name, string link)
         {
+            List<Error> errors = [];
             if (string.IsNullOrWhiteSpace(name))
-                Errors.General.ValueIsInvalid(nameof(Name));
+                errors.Add(Errors.General.ValueIsInvalid(nameof(Name)));
 
-            if (string.IsNullOrWhiteSpace(link))           
-                Errors.General.ValueIsInvalid(nameof(Link));            
+            if (string.IsNullOrWhiteSpace(link))
+                errors.Add(Errors.General.ValueIsInvalid(nameof(Link)));
+
+            if (errors.Count > 0)
+                return errors;
 
             return new SocialMedia(name, link);
         }
@@ -35,7 +39,7 @@ namespace PetFamily.Domain.Volunteer
     public record SocialMediaList
     {
         public SocialMediaList()
-        {            
+        {
         }
         public SocialMediaList(IEnumerable<SocialMedia> socialMedias)
         {

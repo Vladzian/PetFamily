@@ -15,13 +15,17 @@ namespace PetFamily.Domain.Volunteer
         }
         public string Name { get; }
         public string Description { get; }
-        public static Result<HelpRequisite, Error> Create(string name, string desc)
+        public static Result<HelpRequisite, IEnumerable<Error>> Create(string name, string desc)
         {
+            List<Error> errors = [];
             if (string.IsNullOrWhiteSpace(name))
-                Errors.General.ValueIsInvalid(nameof(Name));
+                errors.Add(Errors.General.ValueIsInvalid(nameof(Name)));
 
             if (string.IsNullOrWhiteSpace(desc))
-                Errors.General.ValueIsInvalid(nameof(Description));
+                errors.Add(Errors.General.ValueIsInvalid(nameof(Description)));
+
+            if (errors.Count > 0)
+                return errors;
 
             return new HelpRequisite(name, desc);
         }
@@ -39,6 +43,6 @@ namespace PetFamily.Domain.Volunteer
         }
         public IReadOnlyList<HelpRequisite> HelpRequisites { get; }
 
-        public static HelpRequisiteList Create() => new HelpRequisiteList(new List<HelpRequisite>() );
+        public static HelpRequisiteList Create() => new HelpRequisiteList(new List<HelpRequisite>());
     }
 }

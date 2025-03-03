@@ -18,13 +18,13 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
             var volunteerId = VolunteerId.NewEntityId();
             var volunteerFullName = VolunteerFullName.Create(request.FullName).Value;
 
-            var volunteerInfo = VolunteerInfo.Create(request.Email,
-                                                     request.GeneralDescription,
-                                                     request.PhoneNumber,
-                                                     request.Experience).Value;
+            var volunteerInfo = VolunteerInfo.Create(request.Info.Email,
+                                                     request.Info.GeneralDescription,
+                                                     request.Info.PhoneNumber,
+                                                     request.Info.Experience).Value;
 
             //проверим наличие волонтера с таким же номером телефона
-            var volunteer = await _volunteersRepository.GetByPhoneNumber(request.PhoneNumber, cancellationToken);
+            var volunteer = await _volunteersRepository.GetByPhoneNumber(request.Info.PhoneNumber, cancellationToken);
             if (volunteer.IsSuccess)
                 return Errors.Volunteers.AlreadyExist();
 
@@ -39,9 +39,6 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
                 foreach (var socialMedia in request.SocialMedias)
                 {
                     var result = SocialMedia.Create(socialMedia.Name, socialMedia.Link);
-                    if (result.IsFailure)
-                        return result.Error;
-
                     tmpSocMedias.Add(result.Value);
                 }
                 SocialMediaList listSocMedias = new SocialMediaList(tmpSocMedias);
@@ -54,9 +51,6 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
                 foreach (var helpRequisite in request.HelpRequisites)
                 {
                     var result = HelpRequisite.Create(helpRequisite.Name, helpRequisite.Desc);
-                    if (result.IsFailure)
-                        return result.Error;
-
                     tmpHelpRequisites.Add(result.Value);
                 }
                 HelpRequisiteList listHelpRequisite = new HelpRequisiteList(tmpHelpRequisites);

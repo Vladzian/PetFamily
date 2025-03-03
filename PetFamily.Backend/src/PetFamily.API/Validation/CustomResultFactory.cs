@@ -15,7 +15,7 @@ namespace PetFamily.API.Validation
         {
             if(validationProblemDetails is null)
             {
-                throw new InvalidProgramException("validationProblemDetails is null");
+                throw new InvalidProgramException("ValidationProblemDetails is null");
             }
             List<ResponseError> errors = [];
 
