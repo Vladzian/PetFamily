@@ -24,6 +24,7 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
                                                      request.Info.Experience).Value;
 
             //проверим наличие волонтера с таким же номером телефона
+            //это бизнес-логика
             var volunteer = await _volunteersRepository.GetByPhoneNumber(request.Info.PhoneNumber, cancellationToken);
             if (volunteer.IsSuccess)
                 return Errors.Volunteers.AlreadyExist();
