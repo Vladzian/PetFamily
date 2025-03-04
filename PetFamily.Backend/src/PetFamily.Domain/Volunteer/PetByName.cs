@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Volunteer
 {
+
     public record PetByName
     {
         private PetByName(string value)

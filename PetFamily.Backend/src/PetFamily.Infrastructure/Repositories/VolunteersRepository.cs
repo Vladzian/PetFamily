@@ -17,7 +17,7 @@ namespace PetFamily.Infrastructure.Repositories
 
         public async Task<Result<IEnumerable<Volunteer>>> GetAll(CancellationToken cancellationToken = default)
         {
-            var collection = await _dbContext.Volunteers.Where(x => true).ToListAsync(); //.ToListAsync(cancellationToken);
+            var collection = await _dbContext.Volunteers.Where(x => true).ToListAsync(cancellationToken); 
             return collection;
         }
 

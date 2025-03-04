@@ -21,22 +21,26 @@ namespace PetFamily.Domain.Volunteer
         public string PhoneNumber { get; }
         public byte Experience { get; }
 
-        public static Result<VolunteerInfo, Error> Create(string email, string generalDescription, string phoneNumber, byte experience = 0)
-        {            
-            if (string.IsNullOrWhiteSpace(email) )
-                return Errors.General.ValueIsRequired(nameof(Email));
-            
+        public static Result<VolunteerInfo, IEnumerable<Error>> Create(string email, string generalDescription, string phoneNumber, byte experience = 0)
+        {
+            List<Error> errors = [];
+            if (string.IsNullOrWhiteSpace(email))
+                errors.Add(Errors.General.ValueIsRequired(nameof(Email)));
+
             Regex emailRegex = new Regex(@"^.+@.+\..+");// полез искать регулярку и попал на эту статью https://habr.com/ru/articles/175375/
             if (!emailRegex.IsMatch(email))
-                return Errors.General.ValueIsIncorrect(nameof(Email));
+                errors.Add(Errors.General.ValueIsIncorrect(nameof(Email)));
 
             if (string.IsNullOrWhiteSpace(phoneNumber))
-                return Errors.General.ValueIsRequired(nameof(PhoneNumber));
+                errors.Add(Errors.General.ValueIsRequired(nameof(PhoneNumber)));
 
             Regex regex = new Regex(@"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$");
             if (!regex.IsMatch(phoneNumber))
-                return Errors.General.ValueIsIncorrect(nameof(PhoneNumber));
-            
+                errors.Add(Errors.General.ValueIsIncorrect(nameof(PhoneNumber)));
+
+            if (errors.Count > 0)
+                return errors;
+
 
             return new VolunteerInfo(email, generalDescription, phoneNumber, experience);
         }

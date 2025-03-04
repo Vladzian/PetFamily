@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Extensions;
 using PetFamily.API.Response;
 using PetFamily.Application.Volunteers.CreateVolunteer;
 using PetFamily.Application.Volunteers.GetVolunteer;
+using PetFamily.Domain.Shared;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace PetFamily.API.Controllers
-{
-    [ApiController]
-    [Route("[controller]")]
-    public class VolunteersController : ControllerBase
+{    
+    public class VolunteersController : ApplicationController
     {
 
         [HttpGet]
@@ -17,7 +20,7 @@ namespace PetFamily.API.Controllers
         {
             var result = await createVolunteerHandler.GetAllAsync(cancellationToken);            
 
-            return Ok(Envelope.Ok(result.Value));
+            return Ok(result.Value);
         }
 
         [HttpGet("{id:guid}")]
@@ -29,19 +32,28 @@ namespace PetFamily.API.Controllers
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return Ok(Envelope.Ok(result.Value));
+            return Ok(result.Value);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromServices] CreateVolunteerHandler createVolunteerHandler,
+                                                //[FromServices] IValidator<CreateVolunteerCommand> validator,
                                                 [FromBody] CreateVolunteerCommand request,
                                                 CancellationToken cancellationToken = default)
         {
+            //валидируем VO
+            /*var validatorResult = await validator.ValidateAsync(request, cancellationToken);
+
+            if(validatorResult.IsValid == false)
+            {
+                return validatorResult.ToValidationErrorResponse();
+            }
+            */
             var result = await createVolunteerHandler.HandleAsync(request, cancellationToken);
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return Ok(Envelope.Ok(result.Value));
+            return Ok(result.Value);
         }    
 
     }

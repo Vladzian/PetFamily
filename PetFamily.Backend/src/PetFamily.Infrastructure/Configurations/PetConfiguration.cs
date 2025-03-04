@@ -19,12 +19,12 @@ namespace PetFamily.Infrastructure.Configurations
             builder.ComplexProperty(p => p.Specie, specieBuilder =>
             {
                 specieBuilder.Property(s => s.SpecieId)
-                            .IsRequired(false)
+                            .IsRequired(true)
                             .HasColumnType("uuid")
                             .HasColumnName("specie_id");
 
                 specieBuilder.Property(s => s.BreedId)
-                            .IsRequired(false)
+                            .IsRequired(true)
                             .HasColumnType("uuid")
                             .HasColumnName("breed_id");
             });

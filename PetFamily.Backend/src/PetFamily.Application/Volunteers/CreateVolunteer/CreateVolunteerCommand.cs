@@ -1,8 +1,8 @@
 ﻿namespace PetFamily.Application.Volunteers.CreateVolunteer
 {
-    public record CreateVolunteerCommand(string fullName, string email, string generalDescription,
-                                         string phoneNumber,  List<DtoSocialMedia> socialMedias, List<DtoHelpRequisite> helpRequisites, byte experience = 0);
+    public record CreateVolunteerCommand(string FullName, DtoVolunteerInfo Info,  List<DtoSocialMedia> SocialMedias, List<DtoHelpRequisite> HelpRequisites);
 
-    public record DtoSocialMedia(string name, string link);
-    public record DtoHelpRequisite(string name, string desc);
+    public record DtoVolunteerInfo(string Email, string GeneralDescription, string PhoneNumber, byte Experience = 0);
+    public record DtoSocialMedia(string Name, string Link);
+    public record DtoHelpRequisite(string Name, string Desc);
 }
