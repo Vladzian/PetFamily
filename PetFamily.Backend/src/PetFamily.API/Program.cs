@@ -1,6 +1,7 @@
 using FluentValidation.AspNetCore;
 using PetFamily.API.Validation;
 using PetFamily.Application;
+using PetFamily.Domain.Shared;
 using PetFamily.Infrastructure;
 using Serilog;
 using Serilog.Events;
@@ -8,14 +9,14 @@ using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 Log.Logger = new LoggerConfiguration()
-    //.WriteTo.Console()
-    .WriteTo.Seq("http://localhost:5341")
-    .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Information)
-    .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Information)
-    .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Information)    
+    .WriteTo.Console()
+    .WriteTo.Seq(builder.Configuration.GetConnectionString("CS_SEQ_SERVER"))//"http://172.18.0.4:5341"
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft",LogEventLevel.Warning)
     .CreateLogger();
 
 Log.Information("Starting web application");
+Log.Error(Error.Failure("999","My error message").Serialize());
 
 builder.Services.AddSerilog(); // <-- Add this line
 
@@ -45,4 +46,8 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 
-await app.RunAsync();
+app.Run();
+
+// Important to call at exit so that batched events are flushed.
+Log.Information("Application shutdown!");
+await Log.CloseAndFlushAsync();
