@@ -1,4 +1,7 @@
 using FluentValidation.AspNetCore;
+using Microsoft.EntityFrameworkCore;
+using PetFamily.API.Extensions;
+using PetFamily.API.Middlewares;
 using PetFamily.API.Validation;
 using PetFamily.Application;
 using PetFamily.Domain.Shared;
@@ -18,8 +21,7 @@ Log.Logger = new LoggerConfiguration()
 Log.Information("Starting web application");
 Log.Error(Error.Failure("999","My error message").Serialize());
 
-builder.Services.AddSerilog(); // <-- Add this line
-
+builder.Services.AddSerilog(); 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -35,13 +37,16 @@ builder.Services.AddFluentValidationAutoValidation(configuration =>
 
 
 var app = builder.Build();
-app.UseSerilogRequestLogging(); // <-- Add this line
+app.UseExceptionMiddleware();
+app.UseSerilogRequestLogging();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    //await app.ApplyMigration();
 }
 
 app.MapControllers();
